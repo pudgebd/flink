@@ -1,11 +1,11 @@
-package pers.pudgebd.flink.java.udf;
+package pers.pudgebd.flink.java.func;
 
 import com.haizhi.streamx.sqlparser.lineage.util.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.table.functions.AggregateFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pers.pudgebd.flink.java.udf.accumulate.SelfBuySellAcc;
+import pers.pudgebd.flink.java.func.accumulator.SelfBuySellAcc;
 
 import java.math.BigDecimal;
 import java.util.Map;

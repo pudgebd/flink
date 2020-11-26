@@ -83,10 +83,10 @@ public class JoinAndWindow01 {
         tableEnv.executeSql(finalSql);
     }
 
-    private static void createSth(StreamTableEnvironment tableEnv) {
+    public static void createSth(StreamTableEnvironment tableEnv) {
         tableEnv.registerFunction("output_all_udtaf", new OutputAllUdtaf());
 
-        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.udf.AlertSelfBuySellUdaf' LANGUAGE JAVA");
+        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         tableEnv.executeSql("create table kafka_stock_order(\n" +
                 "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +

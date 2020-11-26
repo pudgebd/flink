@@ -1,4 +1,4 @@
-package pers.pudgebd.flink.java.udf.accumulate;
+package pers.pudgebd.flink.java.func.accumulator;
 
 import lombok.Data;
 import org.apache.commons.lang3.mutable.MutableLong;
