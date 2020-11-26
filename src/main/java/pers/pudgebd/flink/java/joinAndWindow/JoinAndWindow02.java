@@ -8,10 +8,9 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.Tumble;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import pers.pudgebd.flink.java.func.AlertSelfBuySellUdtaf;
-import pers.pudgebd.flink.java.func.OutputAllUdtaf;
 
 import static org.apache.flink.table.api.Expressions.*;
-import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01.createSth;
+import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 
 public class JoinAndWindow02 {
 

@@ -19,7 +19,7 @@ import pers.pudgebd.flink.java.func.OutputAllUdtaf;
 import static org.apache.flink.table.api.Expressions.$;
 import static org.apache.flink.table.api.Expressions.lit;
 
-public class JoinAndWindow01 {
+public class JoinAndWindow01_1 {
 
 
     public static void main(String[] args) throws Exception {
