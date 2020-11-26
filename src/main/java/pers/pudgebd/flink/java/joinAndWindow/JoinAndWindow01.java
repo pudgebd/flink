@@ -72,15 +72,15 @@ public class JoinAndWindow01 {
         SingleOutputStreamOperator<Row> afterJoinSos = afterJoinToRs
                 .map(tp2 -> tp2.f1)
                 .returns(new RowTypeInfo(types2, fieldNames2));
-        afterJoinSos.print();
-        streamEnv.execute("a");
+//        afterJoinSos.print();
+//        streamEnv.execute("a");
 //
-//        String view = "to_insert_ds_" + System.currentTimeMillis();
-//        tableEnv.createTemporaryView(view, afterJoinSos);
-//        String finalSql = StringUtils.join(
-//                "insert into kafka_stock_alert_self_buy_sell select * from ", view
-//        );
-//        tableEnv.executeSql(finalSql);
+        String view = "to_insert_ds_" + System.currentTimeMillis();
+        tableEnv.createTemporaryView(view, afterJoinSos);
+        String finalSql = StringUtils.join(
+                "insert into kafka_stock_alert_self_buy_sell select * from ", view
+        );
+        tableEnv.executeSql(finalSql);
     }
 
     private static void createSth(StreamTableEnvironment tableEnv) {

@@ -71,7 +71,7 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
             return;
         }
         long curMoney = tradePrice * tradeVol;
-        if (add) {
+        if (!add) {
             curMoney = - curMoney;
         }
         accumulate.getSum().add(curMoney);
