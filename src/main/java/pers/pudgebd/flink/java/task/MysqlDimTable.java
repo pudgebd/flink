@@ -17,7 +17,6 @@ import pers.pudgebd.flink.java.pojo.GidSumPricePo;
 import pers.pudgebd.flink.java.pojo.GoodsDetailPo;
 import pers.pudgebd.flink.java.pojo.GrPo;
 import pers.pudgebd.flink.java.pojo.InsertTestPo;
-import pers.pudgebd.flink.java.sink.MyRedisSink;
 import pers.pudgebd.flink.java.sql.CrtTblSqls;
 import pers.pudgebd.flink.java.utils.Constants;
 

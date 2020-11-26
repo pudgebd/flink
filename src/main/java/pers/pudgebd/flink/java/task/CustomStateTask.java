@@ -1,7 +1,6 @@
 package pers.pudgebd.flink.java.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haizhi.streamx.sqlparser.common.util.CommonSqlUtils;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

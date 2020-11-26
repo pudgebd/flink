@@ -12,10 +12,11 @@ import java.io.FileNotFoundException;
 public class TmpMain {
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment bsEnv = StreamExecutionEnvironment.getExecutionEnvironment();
-        EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(bsEnv, bsSettings);
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, settings);
 
+        tableEnv.executeSql("set sql.exec.mini-batch.window.enabled=true");
         tableEnv.executeSql(CrtTblSqls.KAFKA_SOURCE);
 //        String filePath = "/Users/pudgebd/work_doc/flinksql/official_test_sql_hive_dim.sql";
 //        String rawSql = IOUtils.toString(new FileInputStream(filePath));
