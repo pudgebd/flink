@@ -1,7 +1,9 @@
 package pers.pudgebd.flink.java.joinAndWindow;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -20,11 +22,11 @@ import static org.apache.flink.table.api.Expressions.lit;
 public class JoinAndWindow01 {
 
 
-    public static void main(String[] args) {
-        StreamExecutionEnvironment bsEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
-        bsEnv.setParallelism(1);
+    public static void main(String[] args) throws Exception {
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        streamEnv.setParallelism(1);
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(bsEnv, bsSettings);
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
 
         createSth(tableEnv);
 
@@ -53,17 +55,38 @@ public class JoinAndWindow01 {
 //        sos.print();
 //        streamEnv.execute("a");
         tableEnv.createTemporaryView("view_stock_order_window_data", sos);
-        tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell \n" +
-                "select o.sec_code, alert_self_buy_sell(o.order_type, c.acct_id, c.trade_dir, c.trade_price, c.trade_vol) as alert_percent \n" +
+        Table afterJoin = tableEnv.sqlQuery("select o.sec_code, " +
+                "alert_self_buy_sell(o.order_type, c.acct_id, c.trade_dir, c.trade_price, c.trade_vol) as alert_percent \n" +
                 "from view_stock_order_window_data o \n" +
                 "left join kafka_stock_order_confirm c on o.order_no = c.order_no \n" +
                 "group by o.sec_code");
+        DataStream<Tuple2<Boolean, Row>> afterJoinToRs = tableEnv.toRetractStream(afterJoin, Row.class);
+
+        TypeInformation<?>[] types2 = new TypeInformation[2];
+        String[] fieldNames2 = new String[2];
+        types2[0] = TypeInformation.of(new TypeHint<String>() {});
+        types2[1] = TypeInformation.of(new TypeHint<Double>() {});
+        fieldNames2[0] = "sec_code";
+        fieldNames2[1] = "alert_percent";
+
+        SingleOutputStreamOperator<Row> afterJoinSos = afterJoinToRs
+                .map(tp2 -> tp2.f1)
+                .returns(new RowTypeInfo(types2, fieldNames2));
+        afterJoinSos.print();
+        streamEnv.execute("a");
+//
+//        String view = "to_insert_ds_" + System.currentTimeMillis();
+//        tableEnv.createTemporaryView(view, afterJoinSos);
+//        String finalSql = StringUtils.join(
+//                "insert into kafka_stock_alert_self_buy_sell select * from ", view
+//        );
+//        tableEnv.executeSql(finalSql);
     }
 
     private static void createSth(StreamTableEnvironment tableEnv) {
         tableEnv.registerFunction("output_all_udtaf", new OutputAllUdtaf());
 
-        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'demo.flink.udf.AlertSelfBuySellUdaf' LANGUAGE JAVA");
+        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.udf.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         tableEnv.executeSql("create table kafka_stock_order(\n" +
                 "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +
