@@ -1,5 +1,6 @@
 package pers.pudgebd.flink.java.joinAndWindow;
 
+import com.haizhi.streamx.flinkcluster.platformapp.func.ArbitraryAggFunc;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -14,6 +15,9 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.Tumble;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
+import pers.pudgebd.flink.java.constants.FuncName;
+import pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf;
+import pers.pudgebd.flink.java.func.AlertSelfBuySellUdtaf;
 import pers.pudgebd.flink.java.func.OutputAllUdtaf;
 
 import static org.apache.flink.table.api.Expressions.$;
@@ -84,9 +88,10 @@ public class JoinAndWindow01_1 {
     }
 
     public static void createSth(StreamTableEnvironment tableEnv) {
-        tableEnv.registerFunction("output_all_udtaf", new OutputAllUdtaf());
-
-        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
+//        tableEnv.createTemporarySystemFunction(FuncName.OUTPUT_ALL_UDTF, new OutputAllUdtf());
+//        tableEnv.registerFunction(FuncName.OUTPUT_ALL_UDTAF, new OutputAllUdtaf());
+        tableEnv.registerFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
+//        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         tableEnv.executeSql("create table kafka_stock_order(\n" +
                 "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +
@@ -101,8 +106,7 @@ public class JoinAndWindow01_1 {
                 "    pbu double COMMENT '发出此订单的报盘机编号',\n" +
                 "    order_status string COMMENT '订单状态,0=New,1=Cancelled,2=Reject',\n" +
                 "    proctime AS proctime(),\n" +
-                "    ts timestamp(3) COMMENT '订单接收时间,Timestamp，微妙级时间戳',\n" +
-                "    WATERMARK FOR ts AS ts - INTERVAL '5' SECOND\n" +
+                "    ts timestamp(3) COMMENT '订单接收时间,Timestamp，微妙级时间戳'\n" +
                 ") \n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +
