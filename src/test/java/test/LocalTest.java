@@ -81,9 +81,6 @@ public class LocalTest {
 
     @Test
     public void localDateTime() throws Exception {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Calendar cal = Calendar.getInstance();
-        System.out.println(localDateTime.toString());
-
+        System.out.println(System.currentTimeMillis());
     }
 }

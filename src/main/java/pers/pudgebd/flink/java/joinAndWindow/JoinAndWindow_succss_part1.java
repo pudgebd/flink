@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import static org.apache.flink.table.api.Expressions.*;
 import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 
-public class JoinAndWindow_succss {
+public class JoinAndWindow_succss_part1 {
 
 
     public static void main(String[] args) throws Exception {
