@@ -144,6 +144,29 @@ public class JoinAndWindow01_1 {
                 " 'json.timestamp-format.standard' = 'ISO-8601'\n" +
                 ")");
 
+        tableEnv.executeSql("create table kafka_stock_after_join(\n" +
+                "    sec_code string,\n" +
+                "    act_no bigint,\n" +
+                "    acct_id string,\n" +
+                "    order_no bigint,\n" +
+                "    trade_dir string,\n" +
+                "    trade_price bigint comment '交易价格，单位为分',\n" +
+                "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
+                "    ts timestamp(3),\n" +
+                "    tsl bigint,\n" +
+                "    pbu bigint\n" +
+                ")\n" +
+                "with (\n" +
+                " 'connector' = 'kafka',\n" +
+                " 'topic' = 'stock_order_confirm',\n" +
+                " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
+                " 'properties.group.id' = 'stock_order_confirm_group',\n" +
+                " 'format' = 'json',\n" +
+                " 'scan.startup.mode' = 'latest-offset',\n" +
+                " 'json.ignore-parse-errors' = 'true',\n" +
+                " 'json.timestamp-format.standard' = 'ISO-8601'\n" +
+                ")");
+
         tableEnv.executeSql("create table kafka_stock_alert_self_buy_sell(\n" +
                 "    sec_code string,\n" +
                 "    alert_percent double\n" +

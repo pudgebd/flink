@@ -114,18 +114,12 @@ public class JoinAndWindow01_2 {
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
                 .returns(new RowTypeInfo(types2, fieldNames2));
-//        sos.print();
-//        streamEnv.execute("a");
 
         Table sosTbl = tableEnv.fromDataStream(sos, $("ts"), $("sec_code"),
                 $("order_type"), $("acct_id"), $("trade_dir"),
                 $("trade_price"), $("trade_vol"), $("is_acc"), $("tsl"));
 
-//        sosTbl.printSchema();
-//        tableEnv.toAppendStream(sosTbl, Row.class)
-//        .print();
-//        streamEnv.execute("a");
-        if (true) {
+        if (false) {
         Table aggTbl = sosTbl.window(Tumble.over(lit(3).seconds()).on($("tsl2")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(

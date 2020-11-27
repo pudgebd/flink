@@ -37,7 +37,6 @@ public class JoinAndWindow01_3 {
                         "c.trade_price, c.trade_vol, o.ts " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
-//        tableEnv.createTemporaryView("joinedTbl", joinedTbl);
 
 //        joinedTbl.addOrReplaceColumns($("ts").rowtime());
 
