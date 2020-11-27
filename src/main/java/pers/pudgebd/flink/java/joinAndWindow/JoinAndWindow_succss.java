@@ -39,67 +39,37 @@ public class JoinAndWindow_succss {
 
         createSth(tableEnv);
         Table joinedTbl = tableEnv.sqlQuery(
-                "select o.ts_sql, o.ts_iso, o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
-                        "c.trade_price, c.trade_vol " +
+                "select o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
+                        "c.trade_price, c.trade_vol, o.ts_sql " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
-//        TypeInformation<?>[] types1 = new TypeInformation[8];
-//        String[] fieldNames1 = new String[8];
-//        types1[0] = TypeInformation.of(new TypeHint<Timestamp>() {
-//        }); //Timestamp LocalDateTime
-//        types1[1] = TypeInformation.of(new TypeHint<String>() {
-//        });
-//        types1[2] = TypeInformation.of(new TypeHint<Long>() {
-//        });
-//        types1[3] = TypeInformation.of(new TypeHint<String>() {
-//        });
-//        types1[4] = TypeInformation.of(new TypeHint<String>() {
-//        });
-//        types1[5] = TypeInformation.of(new TypeHint<Long>() {
-//        });
-//        types1[6] = TypeInformation.of(new TypeHint<Long>() {
-//        });
-//        types1[7] = TypeInformation.of(new TypeHint<Timestamp>() {
-//        });
-//        fieldNames1[0] = "ts_sql";
-//        fieldNames1[1] = "sec_code";
-//        fieldNames1[2] = "order_type";
-//        fieldNames1[3] = "acct_id";
-//        fieldNames1[4] = "trade_dir";
-//        fieldNames1[5] = "trade_price";
-//        fieldNames1[6] = "trade_vol";
-//        fieldNames1[7] = "ts_iso";
-
         DataStream<Tuple2<Boolean, Row>> ds = tableEnv.toRetractStream(joinedTbl, Row.class); //, new RowTypeInfo(types1, fieldNames1)
-        TypeInformation<?>[] types2 = new TypeInformation[9];
-        String[] fieldNames2 = new String[9];
-        types2[0] = TypeInformation.of(new TypeHint<LocalDateTime>() {
-        }); //Timestamp LocalDateTime
-        types2[1] = TypeInformation.of(new TypeHint<Timestamp>() {
+        TypeInformation<?>[] types2 = new TypeInformation[8];
+        String[] fieldNames2 = new String[8];
+        types2[0] = TypeInformation.of(new TypeHint<String>() {
+        });
+        types2[1] = TypeInformation.of(new TypeHint<Long>() {
         });
         types2[2] = TypeInformation.of(new TypeHint<String>() {
         });
-        types2[3] = TypeInformation.of(new TypeHint<Long>() {
+        types2[3] = TypeInformation.of(new TypeHint<String>() {
         });
-        types2[4] = TypeInformation.of(new TypeHint<String>() {
+        types2[4] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[5] = TypeInformation.of(new TypeHint<String>() {
+        types2[5] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[6] = TypeInformation.of(new TypeHint<Long>() {
+        types2[6] = TypeInformation.of(new TypeHint<LocalDateTime>() {
+        }); //Timestamp LocalDateTime
+        types2[7] = TypeInformation.of(new TypeHint<Boolean>() {
         });
-        types2[7] = TypeInformation.of(new TypeHint<Long>() {
-        });
-        types2[8] = TypeInformation.of(new TypeHint<Boolean>() {
-        });
-        fieldNames2[0] = "ts_sql";
-        fieldNames2[1] = "ts_iso";
-        fieldNames2[2] = "sec_code";
-        fieldNames2[3] = "order_type";
-        fieldNames2[4] = "acct_id";
-        fieldNames2[5] = "trade_dir";
-        fieldNames2[6] = "trade_price";
-        fieldNames2[7] = "trade_vol";
-        fieldNames2[8] = "is_acc";
+        fieldNames2[0] = "sec_code";
+        fieldNames2[1] = "order_type";
+        fieldNames2[2] = "acct_id";
+        fieldNames2[3] = "trade_dir";
+        fieldNames2[4] = "trade_price";
+        fieldNames2[5] = "trade_vol";
+        fieldNames2[6] = "ts_sql";
+        fieldNames2[7] = "is_acc";
 
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> {
@@ -114,16 +84,17 @@ public class JoinAndWindow_succss {
                     return Row.join(tp2.f1, Row.of(tp2.f0));
                 })
                 .returns(new RowTypeInfo(types2, fieldNames2));
-//        sos.print();
-//        streamEnv.execute("a");
+        sos.print();
+        streamEnv.execute("a");
 
+        if (false) {
         Table sosTbl = tableEnv.fromDataStream(sos);
         tableEnv.createTemporaryView("sosTbl", sosTbl);
         tableEnv.executeSql("insert into kafka_stock_after_join " +
                 "select sec_code, order_type, acct_id, trade_dir, trade_price, " +
                 "trade_vol, ts_sql, is_acc from sosTbl");
 
-        if (false) {
+
         Table aggTbl = sosTbl.window(Tumble.over(lit(3).seconds()).on($("tsl2")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(

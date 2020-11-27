@@ -105,10 +105,7 @@ public class JoinAndWindow01_1 {
                 "    withdraw_order_no bigint COMMENT '撤单订单编号',\n" +
                 "    pbu double COMMENT '发出此订单的报盘机编号',\n" +
                 "    order_status string COMMENT '订单状态,0=New,1=Cancelled,2=Reject',\n" +
-                "    proctime AS proctime(),\n" +
-                "    ts_sql timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'," +
-                "    ts_iso timestamp(3),\n" +
-                "    tsl bigint" +
+                "    ts_sql timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'" +
 //                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECOND"+
                 ") \n" +
                 "with (\n" +
@@ -131,7 +128,6 @@ public class JoinAndWindow01_1 {
                 "    trade_price bigint comment '交易价格，单位为分',\n" +
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
                 "    ts_sql timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'," +
-                "    ts_iso timestamp(3),\n" +
                 "    pbu bigint\n" +
                 ")\n" +
                 "with (\n" +
@@ -153,7 +149,6 @@ public class JoinAndWindow01_1 {
                 "    trade_price bigint comment '交易价格，单位为分',\n" +
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
                 "    ts_sql timestamp(3),\n" +
-//                "    ts_iso timestamp(3),\n" +
                 "    is_acc boolean\n" +
                 ")\n" +
                 "with (\n" +
