@@ -37,21 +37,11 @@ public class JoinAndWindow01_3 {
                         "c.trade_price, c.trade_vol, o.ts " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
-        tableEnv.createTemporaryView("joinedTbl", joinedTbl);
+//        tableEnv.createTemporaryView("joinedTbl", joinedTbl);
 
-        tableEnv.executeSql("create view view_after_join(\n" +
-                "    order_type,\n" +
-                "    acct_id,\n" +
-                "    sec_code,\n" +
-                "    trade_dir,\n" +
-                "    trade_price,\n" +
-                "    trade_vol," +
-                "    ts"+
-                ") AS select order_type, acct_id, sec_code, trade_dir, trade_price, trade_vol, ts from joinedTbl");
 //        joinedTbl.addOrReplaceColumns($("ts").rowtime());
 
-        Table view_after_join =  tableEnv.from("view_after_join");
-        Table aggTbl = view_after_join.window(Tumble.over(lit(3).seconds()).on($("ts")).as("w"))
+        Table aggTbl = joinedTbl.window(Tumble.over(lit(3).seconds()).on($("ts")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(
                         call(

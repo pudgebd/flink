@@ -111,7 +111,7 @@ public class JoinAndWindow01_2 {
 //        sos.print();
 //        streamEnv.execute("a");
 
-        Table sosTbl = tableEnv.fromDataStream(sos, $("ts").rowtime(), $("sec_code"),
+        Table sosTbl = tableEnv.fromDataStream(sos, $("ts"), $("sec_code"),
                 $("order_type"), $("acct_id"), $("trade_dir"),
                 $("trade_price"), $("trade_vol"), $("is_acc"));
 

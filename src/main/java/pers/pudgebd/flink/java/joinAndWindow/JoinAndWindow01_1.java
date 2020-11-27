@@ -106,6 +106,7 @@ public class JoinAndWindow01_1 {
                 "    pbu double COMMENT '发出此订单的报盘机编号',\n" +
                 "    order_status string COMMENT '订单状态,0=New,1=Cancelled,2=Reject',\n" +
                 "    proctime AS proctime(),\n" +
+//                "    ts bigint" +
                 "    ts timestamp(3) COMMENT '订单接收时间,Timestamp，微妙级时间戳'" +
 //                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECOND"+
                 ") \n" +
