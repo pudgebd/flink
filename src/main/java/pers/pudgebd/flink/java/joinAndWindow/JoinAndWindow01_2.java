@@ -46,11 +46,11 @@ public class JoinAndWindow01_2 {
         createSth(tableEnv);
         Table joinedTbl = tableEnv.sqlQuery(
                 "select o.ts, o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
-                        "c.trade_price, c.trade_vol " +
+                        "c.trade_price, c.trade_vol, o.tsl " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
-        TypeInformation<?>[] types1 = new TypeInformation[7];
-        String[] fieldNames1 = new String[7];
+        TypeInformation<?>[] types1 = new TypeInformation[8];
+        String[] fieldNames1 = new String[8];
         types1[0] = TypeInformation.of(new TypeHint<Timestamp>() {
         }); //Timestamp LocalDateTime
         types1[1] = TypeInformation.of(new TypeHint<String>() {
@@ -65,6 +65,8 @@ public class JoinAndWindow01_2 {
         });
         types1[6] = TypeInformation.of(new TypeHint<Long>() {
         });
+        types1[7] = TypeInformation.of(new TypeHint<Long>() {
+        });
         fieldNames1[0] = "ts";
         fieldNames1[1] = "sec_code";
         fieldNames1[2] = "order_type";
@@ -72,14 +74,15 @@ public class JoinAndWindow01_2 {
         fieldNames1[4] = "trade_dir";
         fieldNames1[5] = "trade_price";
         fieldNames1[6] = "trade_vol";
+        fieldNames1[7] = "tsl";
 
         DataStream<Tuple2<Boolean, Row>> ds = tableEnv.toRetractStream(joinedTbl, new RowTypeInfo(types1, fieldNames1)); //, new RowTypeInfo(types1, fieldNames1)
 //        ds.print();
 //        streamEnv.execute("a");
 
 
-        TypeInformation<?>[] types2 = new TypeInformation[8];
-        String[] fieldNames2 = new String[8];
+        TypeInformation<?>[] types2 = new TypeInformation[9];
+        String[] fieldNames2 = new String[9];
         types2[0] = TypeInformation.of(new TypeHint<Timestamp>() {
         }); //Timestamp LocalDateTime
         types2[1] = TypeInformation.of(new TypeHint<String>() {
@@ -96,6 +99,8 @@ public class JoinAndWindow01_2 {
         });
         types2[7] = TypeInformation.of(new TypeHint<Boolean>() {
         });
+        types2[8] = TypeInformation.of(new TypeHint<Long>() {
+        });
         fieldNames2[0] = "ts";
         fieldNames2[1] = "sec_code";
         fieldNames2[2] = "order_type";
@@ -104,6 +109,7 @@ public class JoinAndWindow01_2 {
         fieldNames2[5] = "trade_price";
         fieldNames2[6] = "trade_vol";
         fieldNames2[7] = "is_acc";
+        fieldNames2[8] = "tsl";
 
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
@@ -113,7 +119,7 @@ public class JoinAndWindow01_2 {
 
         Table sosTbl = tableEnv.fromDataStream(sos, $("ts"), $("sec_code"),
                 $("order_type"), $("acct_id"), $("trade_dir"),
-                $("trade_price"), $("trade_vol"), $("is_acc"));
+                $("trade_price"), $("trade_vol"), $("is_acc"), $("tsl"));
 
 //        sosTbl.printSchema();
         tableEnv.toAppendStream(sosTbl, Row.class)
