@@ -97,9 +97,9 @@ public class JoinAndWindow01_2 {
         });
         types2[6] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[7] = TypeInformation.of(new TypeHint<Boolean>() {
+        types2[7] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[8] = TypeInformation.of(new TypeHint<Long>() {
+        types2[8] = TypeInformation.of(new TypeHint<Boolean>() {
         });
         fieldNames2[0] = "ts";
         fieldNames2[1] = "sec_code";
@@ -108,8 +108,8 @@ public class JoinAndWindow01_2 {
         fieldNames2[4] = "trade_dir";
         fieldNames2[5] = "trade_price";
         fieldNames2[6] = "trade_vol";
-        fieldNames2[7] = "is_acc";
-        fieldNames2[8] = "tsl";
+        fieldNames2[7] = "tsl";
+        fieldNames2[8] = "is_acc";
 
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
@@ -122,11 +122,11 @@ public class JoinAndWindow01_2 {
                 $("trade_price"), $("trade_vol"), $("is_acc"), $("tsl"));
 
 //        sosTbl.printSchema();
-        tableEnv.toAppendStream(sosTbl, Row.class)
-        .print();
-        streamEnv.execute("a");
-        if (false) {
-        Table aggTbl = sosTbl.window(Tumble.over(lit(3).seconds()).on($("ts")).as("w"))
+//        tableEnv.toAppendStream(sosTbl, Row.class)
+//        .print();
+//        streamEnv.execute("a");
+        if (true) {
+        Table aggTbl = sosTbl.window(Tumble.over(lit(3).seconds()).on($("tsl2")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(
                         call(
