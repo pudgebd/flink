@@ -29,7 +29,7 @@ public class JoinAndWindow_succss {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         streamEnv.setParallelism(1);
-        streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+//        streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
 
@@ -40,7 +40,7 @@ public class JoinAndWindow_succss {
         createSth(tableEnv);
         Table joinedTbl = tableEnv.sqlQuery(
                 "select o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
-                        "c.trade_price, c.trade_vol, o.ts_sql " +
+                        "c.trade_price, c.trade_vol, o.ts_long " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
         DataStream<Tuple2<Boolean, Row>> ds = tableEnv.toRetractStream(joinedTbl, Row.class); //, new RowTypeInfo(types1, fieldNames1)
@@ -58,7 +58,7 @@ public class JoinAndWindow_succss {
         });
         types2[5] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[6] = TypeInformation.of(new TypeHint<LocalDateTime>() {
+        types2[6] = TypeInformation.of(new TypeHint<Long>() {
         }); //Timestamp LocalDateTime
         types2[7] = TypeInformation.of(new TypeHint<Boolean>() {
         });
@@ -68,8 +68,9 @@ public class JoinAndWindow_succss {
         fieldNames2[3] = "trade_dir";
         fieldNames2[4] = "trade_price";
         fieldNames2[5] = "trade_vol";
-        fieldNames2[6] = "ts_sql";
+        fieldNames2[6] = "ts_long";
         fieldNames2[7] = "is_acc";
+        RowTypeInfo rowTypeInfo2 = new RowTypeInfo(types2, fieldNames2);
 
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> {
@@ -83,33 +84,17 @@ public class JoinAndWindow_succss {
                     }
                     return Row.join(tp2.f1, Row.of(tp2.f0));
                 })
-                .returns(new RowTypeInfo(types2, fieldNames2));
-        sos.print();
-        streamEnv.execute("a");
+                .returns(rowTypeInfo2);
+//        sos.print();
+//        streamEnv.execute("a");
 
-        if (false) {
         Table sosTbl = tableEnv.fromDataStream(sos);
         tableEnv.createTemporaryView("sosTbl", sosTbl);
-        tableEnv.executeSql("insert into kafka_stock_after_join " +
-                "select sec_code, order_type, acct_id, trade_dir, trade_price, " +
-                "trade_vol, ts_sql, is_acc from sosTbl");
-
-
-        Table aggTbl = sosTbl.window(Tumble.over(lit(3).seconds()).on($("tsl2")).as("w"))
-                .groupBy($("w"), $("sec_code"))
-                .flatAggregate(
-                        call(
-                                FuncName.ALERT_SELF_BUY_SELL_UDTAF, $("order_type"), $("acct_id"),
-                                $("trade_dir"), $("trade_price"), $("trade_vol"),
-                                $("is_acc")
-                        ).as("alert_percent")
-                )
-                .select($("sec_code"), $("alert_percent"));
-
-        tableEnv.createTemporaryView("tmp", aggTbl);
-        tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell select sec_code, alert_percent from tmp");
-
-    }
+//        tableEnv.executeSql("insert into kafka_stock_after_join select sec_code, " +
+//                "order_type, acct_id, trade_dir, " +
+//                "trade_price, trade_vol, ts_long, is_acc from sosTbl");
+//        tableEnv.from("kafka_stock_after_join_write").printSchema();
+        tableEnv.executeSql("insert into kafka_stock_after_join_write select * from sosTbl");
     }
 
 }

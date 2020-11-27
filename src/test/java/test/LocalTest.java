@@ -15,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 
 public class LocalTest {
 
@@ -75,5 +77,13 @@ public class LocalTest {
                 "'lookup.cache.max-rows' = '5000',\n" +
                 "'lookup.cache.ttl' = '1min'\n" +
                 ")");
+    }
+
+    @Test
+    public void localDateTime() throws Exception {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Calendar cal = Calendar.getInstance();
+        System.out.println(localDateTime.toString());
+
     }
 }

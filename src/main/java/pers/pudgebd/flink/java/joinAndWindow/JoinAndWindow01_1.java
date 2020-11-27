@@ -105,8 +105,10 @@ public class JoinAndWindow01_1 {
                 "    withdraw_order_no bigint COMMENT '撤单订单编号',\n" +
                 "    pbu double COMMENT '发出此订单的报盘机编号',\n" +
                 "    order_status string COMMENT '订单状态,0=New,1=Cancelled,2=Reject',\n" +
-                "    ts_sql timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'" +
-//                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECOND"+
+                "    ts_sql timestamp(3) COMMENT '订单接收时间，微妙级时间戳'," +
+                "    ts_iso timestamp(3) COMMENT '订单接收时间，微妙级时间戳'," +
+                "    ts_long bigint COMMENT '订单接收时间，微妙级时间戳'" +
+//                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECONDS"+
                 ") \n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +
@@ -118,6 +120,7 @@ public class JoinAndWindow01_1 {
                 " 'json.ignore-parse-errors' = 'true',\n" +
                 " 'json.timestamp-format.standard' = 'SQL'\n" +
                 ")");
+        //ISO-8601
 
         tableEnv.executeSql("create table kafka_stock_order_confirm(\n" +
                 "    sec_code string,\n" +
@@ -127,8 +130,10 @@ public class JoinAndWindow01_1 {
                 "    trade_dir string,\n" +
                 "    trade_price bigint comment '交易价格，单位为分',\n" +
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
+                "    pbu bigint,\n" +
                 "    ts_sql timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'," +
-                "    pbu bigint\n" +
+                "    ts_iso timestamp(3) COMMENT '订单接收时间,timestamp(3)，微妙级时间戳'," +
+                "    ts_long bigint COMMENT '订单接收时间，微妙级时间戳'" +
                 ")\n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +
@@ -141,21 +146,44 @@ public class JoinAndWindow01_1 {
                 " 'json.timestamp-format.standard' = 'SQL'\n" +
                 ")");
 
-        tableEnv.executeSql("create table kafka_stock_after_join(\n" +
+        tableEnv.executeSql("create table kafka_stock_after_join_write(\n" +
                 "    sec_code string,\n" +
                 "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +
                 "    acct_id string,\n" +
                 "    trade_dir string,\n" +
                 "    trade_price bigint comment '交易价格，单位为分',\n" +
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
-                "    ts_sql timestamp(3),\n" +
+                "    ts_long bigint,\n" +
                 "    is_acc boolean\n" +
                 ")\n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +
                 " 'topic' = 'stock_after_join',\n" +
                 " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
-                " 'properties.group.id' = 'stock_after_join_group',\n" +
+                " 'properties.group.id' = 'kafka_stock_after_join_write_group',\n" +
+                " 'format' = 'json',\n" +
+                " 'scan.startup.mode' = 'latest-offset',\n" +
+                " 'json.ignore-parse-errors' = 'true',\n" +
+                " 'json.timestamp-format.standard' = 'SQL'\n" +
+                ")");
+
+        tableEnv.executeSql("create table kafka_stock_after_join_read(\n" +
+                "    sec_code string,\n" +
+                "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +
+                "    acct_id string,\n" +
+                "    trade_dir string,\n" +
+                "    trade_price bigint comment '交易价格，单位为分',\n" +
+                "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
+                "    ts_long bigint,\n" +
+                "    is_acc boolean,\n" +
+                "    ts AS TO_TIMESTAMP(FROM_UNIXTIME(ts_long, 'yyyy-MM-dd HH:mm:ss.SSS')),\n" +
+                "    WATERMARK FOR ts AS ts - INTERVAL '5' SECONDS"+
+                ")\n" +
+                "with (\n" +
+                " 'connector' = 'kafka',\n" +
+                " 'topic' = 'stock_after_join',\n" +
+                " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
+                " 'properties.group.id' = 'kafka_stock_after_join_read_group',\n" +
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +
