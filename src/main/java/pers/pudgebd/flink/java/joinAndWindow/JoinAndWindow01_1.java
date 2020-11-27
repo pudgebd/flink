@@ -106,7 +106,8 @@ public class JoinAndWindow01_1 {
                 "    pbu double COMMENT '发出此订单的报盘机编号',\n" +
                 "    order_status string COMMENT '订单状态,0=New,1=Cancelled,2=Reject',\n" +
                 "    proctime AS proctime(),\n" +
-                "    ts timestamp(3) COMMENT '订单接收时间,Timestamp，微妙级时间戳'\n" +
+                "    ts timestamp(3) COMMENT '订单接收时间,Timestamp，微妙级时间戳'" +
+//                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECOND"+
                 ") \n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +
@@ -116,7 +117,7 @@ public class JoinAndWindow01_1 {
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +
-                " 'json.timestamp-format.standard' = 'SQL'\n" +
+                " 'json.timestamp-format.standard' = 'ISO-8601'\n" +
                 ")");
 
         tableEnv.executeSql("create table kafka_stock_order_confirm(\n" +
@@ -138,7 +139,7 @@ public class JoinAndWindow01_1 {
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +
-                " 'json.timestamp-format.standard' = 'SQL'\n" +
+                " 'json.timestamp-format.standard' = 'ISO-8601'\n" +
                 ")");
 
         tableEnv.executeSql("create table kafka_stock_alert_self_buy_sell(\n" +
@@ -153,7 +154,7 @@ public class JoinAndWindow01_1 {
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +
-                " 'json.timestamp-format.standard' = 'SQL'\n" +
+                " 'json.timestamp-format.standard' = 'ISO-8601'\n" +
                 ")");
     }
 
