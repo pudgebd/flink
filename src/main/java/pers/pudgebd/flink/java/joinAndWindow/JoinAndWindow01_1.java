@@ -145,13 +145,15 @@ public class JoinAndWindow01_1 {
                 ")");
 
         tableEnv.executeSql("create table kafka_stock_after_join(\n" +
-                "    ts timestamp(3),\n" +
+                "    ts_sql timestamp(3),\n" +
                 "    sec_code string,\n" +
+                "    order_type bigint COMMENT '订单类型, 0:订单；1：撤单',\n" +
                 "    acct_id string,\n" +
                 "    trade_dir string,\n" +
                 "    trade_price bigint comment '交易价格，单位为分',\n" +
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
-                "    is_acc boolean,\n" +
+                "    ts_iso timestamp(3),\n" +
+                "    is_acc boolean\n" +
                 ")\n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +

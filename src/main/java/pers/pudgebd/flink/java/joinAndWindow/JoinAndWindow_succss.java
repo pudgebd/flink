@@ -17,6 +17,7 @@ import org.apache.flink.types.Row;
 import pers.pudgebd.flink.java.constants.FuncName;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static org.apache.flink.table.api.Expressions.*;
 import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
@@ -37,14 +38,14 @@ public class JoinAndWindow_succss {
 
         createSth(tableEnv);
         Table joinedTbl = tableEnv.sqlQuery(
-                "select o.ts, o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
-                        "c.trade_price, c.trade_vol " +
+                "select o.ts_sql, o.sec_code, o.order_type, c.acct_id, c.trade_dir, " +
+                        "c.trade_price, c.trade_vol, o.ts_iso " +
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
         DataStream<Tuple2<Boolean, Row>> ds = tableEnv.toRetractStream(joinedTbl, Row.class); //, new RowTypeInfo(types1, fieldNames1)
-        TypeInformation<?>[] types2 = new TypeInformation[8];
-        String[] fieldNames2 = new String[8];
-        types2[0] = TypeInformation.of(new TypeHint<Timestamp>() {
+        TypeInformation<?>[] types2 = new TypeInformation[9];
+        String[] fieldNames2 = new String[9];
+        types2[0] = TypeInformation.of(new TypeHint<LocalDateTime>() {
         }); //Timestamp LocalDateTime
         types2[1] = TypeInformation.of(new TypeHint<String>() {
         });
@@ -58,16 +59,19 @@ public class JoinAndWindow_succss {
         });
         types2[6] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types2[7] = TypeInformation.of(new TypeHint<Boolean>() {
+        types2[7] = TypeInformation.of(new TypeHint<Timestamp>() {
         });
-        fieldNames2[0] = "ts";
+        types2[8] = TypeInformation.of(new TypeHint<Boolean>() {
+        });
+        fieldNames2[0] = "ts_sql";
         fieldNames2[1] = "sec_code";
         fieldNames2[2] = "order_type";
         fieldNames2[3] = "acct_id";
         fieldNames2[4] = "trade_dir";
         fieldNames2[5] = "trade_price";
         fieldNames2[6] = "trade_vol";
-        fieldNames2[7] = "is_acc";
+        fieldNames2[7] = "ts_iso";
+        fieldNames2[8] = "is_acc";
 
         SingleOutputStreamOperator<Row> sos = ds
                 .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
