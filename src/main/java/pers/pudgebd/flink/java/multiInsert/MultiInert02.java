@@ -17,6 +17,8 @@ import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 
+import java.util.*;
+
 import static org.apache.flink.table.api.Expressions.$;
 import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 
@@ -86,8 +88,8 @@ public class MultiInert02 {
                 .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
                 .returns(rowTypeInfo01);
 
-        OutputTag<Row> outputTag01 = new OutputTag<Row>("side_output_01", rowTypeInfo02){};
-        OutputTag<Row> outputTag02 = new OutputTag<Row>("side_output_02", rowTypeInfo03){};
+        OutputTag<Row> outputTag01 = new OutputTag<Row>("OutputTag01", rowTypeInfo02){};
+        OutputTag<Row> outputTag02 = new OutputTag<Row>("OutputTag02", rowTypeInfo03){};
 
         SingleOutputStreamOperator<Row> mainDataStream = ds.process(new ProcessFunction<Row, Row>() {
             @Override
@@ -96,25 +98,41 @@ public class MultiInert02 {
 
                 String secCode = row.getField(0).toString();
                 if ("p1".equalsIgnoreCase(secCode)) {
-                    ctx.output(outputTag01, Row.ofKind(row.getKind(), row.getField(0),
-                            row.getField(1)));
+                    ctx.output(outputTag01, Row.ofKind(row.getKind(), secCode, row.getField(1)));
 
                 } else if ("p2".equalsIgnoreCase(secCode)) {
-                    ctx.output(outputTag02, Row.ofKind(row.getKind(), row.getField(0),
-                            row.getField(2)));
+                    ctx.output(outputTag02, Row.ofKind(row.getKind(), secCode, row.getField(2)));
                 }
             }
         }, rowTypeInfo01);
 //        mainDataStream.print();
 //        streamEnv.execute("a");
 
-        DataStream<Row> ds01 = mainDataStream.getSideOutput(outputTag01);
-        tableEnv.fromDataStream(ds01)
-                .executeInsert("side_output_01");
-
-        DataStream<Row> ds02 = mainDataStream.getSideOutput(outputTag02);
-        tableEnv.fromDataStream(ds02)
-                .executeInsert("side_output_02");
+        Map<String, OutputTag<Row>> insertTblOtMap = new HashMap<>();
+        insertTblOtMap.put("side_output_01", outputTag01);
+        insertTblOtMap.put("side_output_02", outputTag02);
+        for (Map.Entry<String, OutputTag<Row>> entry : insertTblOtMap.entrySet()) {
+            DataStream<Row> currDs = mainDataStream.getSideOutput(entry.getValue());
+            Table tbl = tableEnv.fromDataStream(currDs);
+            String toInsert = entry.getKey();
+            String fromView = "view_for_" + toInsert;
+            tableEnv.createTemporaryView(fromView, tbl);
+//            tableEnv.sqlQuery()
+        }
+        //------------------------------------------
+//        for (Map.Entry<String, OutputTag<Row>> entry : insertTblOtMap.entrySet()) {
+//            DataStream<Row> currDs = mainDataStream.getSideOutput(entry.getValue());
+//            tableEnv.fromDataStream(currDs)
+//                    .executeInsert(entry.getKey());
+//        }
+        //------------------------------------------
+//        DataStream<Row> ds01 = mainDataStream.getSideOutput(outputTag01);
+//        tableEnv.fromDataStream(ds01)
+//                .executeInsert("side_output_01");
+//
+//        DataStream<Row> ds02 = mainDataStream.getSideOutput(outputTag02);
+//        tableEnv.fromDataStream(ds02)
+//                .executeInsert("side_output_02");
     }
 
 
