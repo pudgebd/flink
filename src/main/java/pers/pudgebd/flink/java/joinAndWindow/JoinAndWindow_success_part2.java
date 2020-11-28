@@ -19,8 +19,8 @@ public class JoinAndWindow_success_part2 {
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         streamEnv.setParallelism(1);
         streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
+        EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, settings);
 
         createSth(tableEnv);
         Table kafka_stock_after_join_read = tableEnv.from("kafka_stock_after_join_read");
