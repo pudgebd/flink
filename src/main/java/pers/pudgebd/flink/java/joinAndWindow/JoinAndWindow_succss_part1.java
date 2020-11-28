@@ -72,17 +72,7 @@ public class JoinAndWindow_succss_part1 {
         RowTypeInfo rowTypeInfo2 = new RowTypeInfo(types2, fieldNames2);
 
         SingleOutputStreamOperator<Row> sos = ds
-                .map(tp2 -> {
-                    boolean isAcc = tp2.f0;
-                    RowKind rk = tp2.f1.getKind();
-                    if (rk == RowKind.INSERT && !isAcc) {
-                        System.out.println(tp2);
-                    }
-                    if (rk != RowKind.INSERT && isAcc) {
-                        System.out.println(tp2);
-                    }
-                    return Row.join(tp2.f1, Row.of(tp2.f0));
-                })
+                .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
                 .returns(rowTypeInfo2);
 //        sos.print();
 //        streamEnv.execute("a");
