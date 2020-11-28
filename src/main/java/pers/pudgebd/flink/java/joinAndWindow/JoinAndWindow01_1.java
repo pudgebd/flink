@@ -92,7 +92,8 @@ public class JoinAndWindow01_1 {
         tableEnv.registerFunction(FuncName.BIGINT_TO_TS, new BigintToTimestamp());
 //        tableEnv.createTemporarySystemFunction(FuncName.OUTPUT_ALL_UDTF, new OutputAllUdtf());
 //        tableEnv.registerFunction(FuncName.OUTPUT_ALL_UDTAF, new OutputAllUdtaf());
-        tableEnv.createTemporarySystemFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
+        tableEnv.registerFunction(FuncName.ALERT_SELF_BUY_SELL_UDAF, new AlertSelfBuySellUdaf());
+        tableEnv.registerFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
 //        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         tableEnv.executeSql("create table kafka_stock_order(\n" +
@@ -200,7 +201,7 @@ public class JoinAndWindow01_1 {
                 " 'connector' = 'kafka',\n" +
                 " 'topic' = 'stock_alert_self_buy_sell',\n" +
                 " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
-                " 'properties.group.id' = 'stock_alert_self_buy_sell',\n" +
+                " 'properties.group.id' = 'stock_alert_self_buy_sell_group',\n" +
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +

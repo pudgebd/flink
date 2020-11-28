@@ -46,7 +46,7 @@ public class JoinAndWindow_success_part2 {
         } else {
             tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell " +
                     "select sec_code, " +
-                    "alert_self_buy_sell_udtaf(order_type, acct_id, trade_dir, trade_price, trade_vol, is_acc) " +
+                    "alert_self_buy_sell_udaf(order_type, acct_id, trade_dir, trade_price, trade_vol, is_acc) " +
                     "as alert_percent " +
                     "from kafka_stock_after_join_read " +
                     "group by TUMBLE(ts, INTERVAL '10' SECONDS), sec_code");
