@@ -1,4 +1,4 @@
-package pers.pudgebd.flink.java.multiJoin;
+package pers.pudgebd.flink.java.multiInsert;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -15,7 +15,7 @@ public class MultiJoin01 {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, settings);
 
-        
+
     }
 
 }

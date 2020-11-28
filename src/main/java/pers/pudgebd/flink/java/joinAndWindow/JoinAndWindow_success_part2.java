@@ -29,20 +29,27 @@ public class JoinAndWindow_success_part2 {
 //                .print();
 //        streamEnv.execute("a");
 
-        if (true) {
-        Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(60).seconds()).on($("ts")).as("w"))
-                .groupBy($("w"), $("sec_code"))
-                .flatAggregate(
-                        call(
-                                FuncName.ALERT_SELF_BUY_SELL_UDTAF, $("order_type"), $("acct_id"),
-                                $("trade_dir"), $("trade_price"), $("trade_vol"),
-                                $("is_acc")
-                        ).as("alert_percent")
-                )
-                .select($("sec_code"), $("alert_percent"));
+        if (false) {
+            Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(60).seconds()).on($("ts")).as("w"))
+                    .groupBy($("w"), $("sec_code"))
+                    .flatAggregate(
+                            call(
+                                    FuncName.ALERT_SELF_BUY_SELL_UDTAF, $("order_type"), $("acct_id"),
+                                    $("trade_dir"), $("trade_price"), $("trade_vol"),
+                                    $("is_acc")
+                            ).as("alert_percent")
+                    )
+                    .select($("sec_code"), $("alert_percent"));
 
-        tableEnv.createTemporaryView("tmp", aggTbl);
-        tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell select sec_code, alert_percent from tmp");
+            tableEnv.createTemporaryView("tmp", aggTbl);
+            tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell select sec_code, alert_percent from tmp");
+        } else {
+            tableEnv.executeSql("insert into kafka_stock_alert_self_buy_sell " +
+                    "select sec_code, " +
+                    "alert_self_buy_sell_udtaf(order_type, acct_id, trade_dir, trade_price, trade_vol, is_acc) " +
+                    "as alert_percent " +
+                    "from kafka_stock_after_join_read " +
+                    "group by TUMBLE(ts, INTERVAL '10' SECONDS), sec_code");
         }
     }
 

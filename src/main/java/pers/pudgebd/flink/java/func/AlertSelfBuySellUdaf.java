@@ -2,6 +2,7 @@ package pers.pudgebd.flink.java.func;
 
 import com.haizhi.streamx.sqlparser.lineage.util.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.MutableLong;
 import org.apache.flink.table.functions.AggregateFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +55,9 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
     private void accOrRetract(SelfBuySellAcc accumulate, boolean isAcc, Long orderType, String acctId,
                               String tradeDir, Long tradePrice, Long tradeVol) {
         if (orderType == null || tradePrice == null || tradeVol == null) {
-            LOG.error(StringUtils.join("存在null，orderType: ", orderType,
-                    ", tradePrice: ", tradePrice, ", tradeVol: ", tradeVol));
+            //上游没join上
+            //LOG.error(StringUtils.join("存在null，orderType: ", orderType,
+            //        ", tradePrice: ", tradePrice, ", tradeVol: ", tradeVol));
             return;
         }
         if (StringUtils.isAnyBlank(acctId, tradeDir)) {
@@ -79,7 +81,9 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
         Map<String, Long> acctIdBuyMap = accumulate.getAcctIdBuyMap();
         Map<String, Long> acctIdSellMap = accumulate.getAcctIdSellMap();
         if (!isAcc) {
+            //不是收集，就是撤回，撤回上次的累加
             curMoney = - curMoney;
+            accumulate.getSum().add(curMoney);
         }
         if ("b".equalsIgnoreCase(tradeDir)) {
             MapUtils.fillKeyLongMapAddUpVal(acctIdBuyMap, acctId, curMoney);
@@ -92,21 +96,39 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
 
 
     public void accumulate(SelfBuySellAcc accumulate, Long orderType, String acctId,
-                           String tradeDir, Long tradePrice, Long tradeVol) {
-        accOrRetract(accumulate, true, orderType, acctId, tradeDir,
+                           String tradeDir, Long tradePrice, Long tradeVol, boolean isAcc) {
+        accOrRetract(accumulate, isAcc, orderType, acctId, tradeDir,
                 tradePrice, tradeVol);
     }
 
 
     public void retract(SelfBuySellAcc accumulate, Long orderType, String acctId,
-                        String tradeDir, Long tradePrice, Long tradeVol) {
-        accOrRetract(accumulate, false, orderType, acctId, tradeDir,
+                        String tradeDir, Long tradePrice, Long tradeVol, boolean isAcc) {
+        accOrRetract(accumulate, isAcc, orderType, acctId, tradeDir,
                 tradePrice, tradeVol);
     }
 
-//    public void merge(SelfBuySellAcc acc, Iterable<SelfBuySellAcc> it) {
-//
-//    }
+    public void merge(SelfBuySellAcc acc, Iterable<SelfBuySellAcc> it) {
+        MutableLong sum = acc.getSum();
+        Map<String, Long> acctIdBuyMap = acc.getAcctIdBuyMap();
+        Map<String, Long> acctIdSellMap = acc.getAcctIdSellMap();
+
+        for (SelfBuySellAcc otherAcc : it) {
+            MutableLong otherSum = otherAcc.getSum();
+            Map<String, Long> otherAcctIdBuyMap = otherAcc.getAcctIdBuyMap();
+            Map<String, Long> otherAcctIdSellMap = otherAcc.getAcctIdSellMap();
+
+            sum.add(otherSum.getValue());
+            foreachStrLongMap(acctIdBuyMap, otherAcctIdBuyMap);
+            foreachStrLongMap(acctIdSellMap, otherAcctIdSellMap);
+        }
+    }
+
+    private void foreachStrLongMap(Map<String, Long> toMap, Map<String, Long> fromMap) {
+        for (Map.Entry<String, Long> entry : fromMap.entrySet()) {
+            MapUtils.fillKeyLongMapAddUpVal(toMap, entry.getKey(), entry.getValue());
+        }
+    }
 
     public void resetAccumulator(SelfBuySellAcc acc) {
         acc.getSum().setValue(0L);

@@ -92,7 +92,7 @@ public class JoinAndWindow01_1 {
         tableEnv.registerFunction(FuncName.BIGINT_TO_TS, new BigintToTimestamp());
 //        tableEnv.createTemporarySystemFunction(FuncName.OUTPUT_ALL_UDTF, new OutputAllUdtf());
 //        tableEnv.registerFunction(FuncName.OUTPUT_ALL_UDTAF, new OutputAllUdtaf());
-        tableEnv.registerFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
+        tableEnv.createTemporarySystemFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
 //        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         tableEnv.executeSql("create table kafka_stock_order(\n" +
