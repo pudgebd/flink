@@ -30,6 +30,7 @@ public class JoinAndWindow_success_part2 {
 //        streamEnv.execute("a");
 
         if (false) {
+            //1.11.2 udtaf 不能在sql中使用
             Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(60).seconds()).on($("ts")).as("w"))
                     .groupBy($("w"), $("sec_code"))
                     .flatAggregate(
