@@ -24,11 +24,11 @@ public class JoinAndWindow_success_part2 {
         createSth(tableEnv);
         Table kafka_stock_after_join_read = tableEnv.from("kafka_stock_after_join_read");
 
-        tableEnv.toAppendStream(kafka_stock_after_join_read, Row.class)
-                .print();
-        streamEnv.execute("a");
+//        tableEnv.toAppendStream(kafka_stock_after_join_read, Row.class)
+//                .print();
+//        streamEnv.execute("a");
 
-        if (false) {
+        if (true) {
         Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(3).seconds()).on($("ts")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(

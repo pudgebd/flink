@@ -30,7 +30,7 @@ public class TmpMain {
 
         createSth(tableEnv);
         Table tmp = tableEnv.sqlQuery(
-                "select FROM_UNIXTIME(ts_long, 'yyyy-MM-dd HH:mm:ss.SSS') from kafka_stock_order");
+                "select bigint_to_ts(ts_long) from kafka_stock_order");
 
         tableEnv.toAppendStream(tmp, Row.class)
                 .print();

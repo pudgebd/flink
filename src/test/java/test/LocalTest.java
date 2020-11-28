@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
@@ -81,6 +82,9 @@ public class LocalTest {
 
     @Test
     public void localDateTime() throws Exception {
-        System.out.println(System.currentTimeMillis());
+//        System.out.println(System.currentTimeMillis());
+        System.out.println(new Timestamp(
+                Long.parseLong("1606536044856123154".substring(0, 13))
+        ));
     }
 }

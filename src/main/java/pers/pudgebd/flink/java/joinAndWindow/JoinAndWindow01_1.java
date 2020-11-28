@@ -18,6 +18,7 @@ import org.apache.flink.types.Row;
 import pers.pudgebd.flink.java.constants.FuncName;
 import pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf;
 import pers.pudgebd.flink.java.func.AlertSelfBuySellUdtaf;
+import pers.pudgebd.flink.java.func.BigintToTimestamp;
 import pers.pudgebd.flink.java.func.OutputAllUdtaf;
 
 import static org.apache.flink.table.api.Expressions.$;
@@ -88,6 +89,7 @@ public class JoinAndWindow01_1 {
     }
 
     public static void createSth(StreamTableEnvironment tableEnv) {
+        tableEnv.registerFunction(FuncName.BIGINT_TO_TS, new BigintToTimestamp());
 //        tableEnv.createTemporarySystemFunction(FuncName.OUTPUT_ALL_UDTF, new OutputAllUdtf());
 //        tableEnv.registerFunction(FuncName.OUTPUT_ALL_UDTAF, new OutputAllUdtaf());
         tableEnv.registerFunction(FuncName.ALERT_SELF_BUY_SELL_UDTAF, new AlertSelfBuySellUdtaf());
@@ -176,7 +178,7 @@ public class JoinAndWindow01_1 {
                 "    trade_vol bigint comment '含3位小数，比如数量为100股，则交易数量为二进制100000',\n" +
                 "    ts_long bigint,\n" +
                 "    is_acc boolean,\n" +
-                "    ts AS TO_TIMESTAMP(FROM_UNIXTIME(ts_long, 'yyyy-MM-dd HH:mm:ss.SSS')),\n" +
+                "    ts AS bigint_to_ts(ts_long),\n" +
                 "    WATERMARK FOR ts AS ts - INTERVAL '5' SECONDS"+
                 ")\n" +
                 "with (\n" +

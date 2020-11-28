@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalField;
 
+
 public class BigintToTimestamp extends ScalarFunction {
 
 
@@ -13,14 +14,22 @@ public class BigintToTimestamp extends ScalarFunction {
         if (num == null) {
             return new Timestamp(System.currentTimeMillis());
         }
-        int len = String.valueOf(num)
-                .length();
-        if (len == 10) {
+        String str = String.valueOf(num);
+        int len = str.length();
+        if (len < 10) {
+            return new Timestamp(System.currentTimeMillis());
+
+        } else if (len == 10) {
+            return new Timestamp(num * 1000);
+
+        } else if (len == 13) {
+            return new Timestamp(num);
 
         } else {
-
+            return new Timestamp(
+                    Long.parseLong(str.substring(0, 13))
+            );
         }
-        return null;
     }
 
     public static Long getmicTime() {
