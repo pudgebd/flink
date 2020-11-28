@@ -27,9 +27,8 @@ public class JoinAndWindow_succss_part1 {
 
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
         streamEnv.setParallelism(1);
-//        streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
 

@@ -83,8 +83,9 @@ public class LocalTest {
     @Test
     public void localDateTime() throws Exception {
 //        System.out.println(System.currentTimeMillis());
-        System.out.println(new Timestamp(
-                Long.parseLong("1606536044856123154".substring(0, 13))
-        ));
+//        System.out.println(new Timestamp(
+//                Long.parseLong("1606536044856123154".substring(0, 13))
+//        ));
+        System.out.println(new Timestamp(1606566074148L));
     }
 }

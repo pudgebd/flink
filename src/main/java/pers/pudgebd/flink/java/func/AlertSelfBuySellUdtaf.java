@@ -59,8 +59,9 @@ public class AlertSelfBuySellUdtaf extends TableAggregateFunction<Double, SelfBu
     private void accOrRetract(SelfBuySellAcc accumulate, boolean isAcc, Long orderType, String acctId,
                               String tradeDir, Long tradePrice, Long tradeVol) {
         if (orderType == null || tradePrice == null || tradeVol == null) {
-            LOG.error(StringUtils.join("存在null，orderType: ", orderType,
-                    ", tradePrice: ", tradePrice, ", tradeVol: ", tradeVol));
+            //上游没join上
+            //LOG.error(StringUtils.join("存在null，orderType: ", orderType,
+            //        ", tradePrice: ", tradePrice, ", tradeVol: ", tradeVol));
             return;
         }
         if (StringUtils.isAnyBlank(acctId, tradeDir)) {
@@ -84,7 +85,9 @@ public class AlertSelfBuySellUdtaf extends TableAggregateFunction<Double, SelfBu
         Map<String, Long> acctIdBuyMap = accumulate.getAcctIdBuyMap();
         Map<String, Long> acctIdSellMap = accumulate.getAcctIdSellMap();
         if (!isAcc) {
+            //不是收集，就是撤回，撤回上次的累加
             curMoney = - curMoney;
+            accumulate.getSum().add(curMoney);
         }
         if ("b".equalsIgnoreCase(tradeDir)) {
             MapUtils.fillKeyLongMapAddUpVal(acctIdBuyMap, acctId, curMoney);

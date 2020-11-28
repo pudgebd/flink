@@ -1,5 +1,6 @@
 package pers.pudgebd.flink.java.joinAndWindow;
 
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -15,7 +16,7 @@ import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 public class JoinAndWindow_success_part2 {
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         streamEnv.setParallelism(1);
         streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
@@ -29,7 +30,7 @@ public class JoinAndWindow_success_part2 {
 //        streamEnv.execute("a");
 
         if (true) {
-        Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(3).seconds()).on($("ts")).as("w"))
+        Table aggTbl = kafka_stock_after_join_read.window(Tumble.over(lit(60).seconds()).on($("ts")).as("w"))
                 .groupBy($("w"), $("sec_code"))
                 .flatAggregate(
                         call(
