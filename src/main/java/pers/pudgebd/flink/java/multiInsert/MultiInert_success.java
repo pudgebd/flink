@@ -23,7 +23,7 @@ import java.util.*;
 import static org.apache.flink.table.api.Expressions.$;
 import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 
-public class MultiInert02 {
+public class MultiInert_success {
 
     static TypeInformation<?>[] types01 = new TypeInformation[3];
     static String[] fieldNames01 = new String[3];
