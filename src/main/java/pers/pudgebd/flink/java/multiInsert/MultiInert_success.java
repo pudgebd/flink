@@ -1,5 +1,6 @@
 package pers.pudgebd.flink.java.multiInsert;
 
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -11,6 +12,7 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
@@ -113,14 +115,23 @@ public class MultiInert_success {
 //        streamEnv.execute("a");
 
         Map<String, OutputTag<Row>> insertTblOtMap = new HashMap<>();
-        insertTblOtMap.put("kafka_side_output_01", outputTag01);
-        insertTblOtMap.put("kafka_side_output_02", outputTag02);
+        insertTblOtMap.put("side_output_01", outputTag01);
+        insertTblOtMap.put("side_output_02", outputTag02);
         for (Map.Entry<String, OutputTag<Row>> entry : insertTblOtMap.entrySet()) {
             String insertTbl = entry.getKey();
-            DataStream<Row> currDs = mainDataStream.getSideOutput(entry.getValue());
-            Table tbl = tableEnv.fromDataStream(currDs);
-            tbl.executeInsert(insertTbl);
+            DataStream<String> currDs = mainDataStream.getSideOutput(entry.getValue())
+                    .map(row -> row.toString());
+
+            FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>(
+                    "192.168.2.201:9092",
+                    insertTbl,
+                    new org.apache.flink.api.common.serialization.SimpleStringSchema()); // fault-tolerance
+
+            currDs.addSink(myProducer);
+//            Table tbl = tableEnv.fromDataStream(currDs);
+//            tbl.executeInsert(insertTbl);
         }
+        streamEnv.execute("a");
         //主流输出
 //        Table tbl = tableEnv.fromDataStream(mainDataStream);
 //        tbl.executeInsert("kafka_main_output");
