@@ -6,6 +6,7 @@ import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -24,8 +25,8 @@ import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 
 public class MultiInert02 {
 
-    static TypeInformation<?>[] types01 = new TypeInformation[4];
-    static String[] fieldNames01 = new String[4];
+    static TypeInformation<?>[] types01 = new TypeInformation[3];
+    static String[] fieldNames01 = new String[3];
     static RowTypeInfo rowTypeInfo01 = new RowTypeInfo();
 
     static TypeInformation<?>[] types02 = new TypeInformation[2];
@@ -43,12 +44,12 @@ public class MultiInert02 {
         });
         types01[2] = TypeInformation.of(new TypeHint<Long>() {
         });
-        types01[3] = TypeInformation.of(new TypeHint<Boolean>() {
-        });
+//        types01[3] = TypeInformation.of(new TypeHint<Boolean>() {
+//        });
         fieldNames01[0] = "sec_code";
         fieldNames01[1] = "order_type";
         fieldNames01[2] = "order_no";
-        fieldNames01[3] = "is_acc";
+//        fieldNames01[3] = "is_acc";
         rowTypeInfo01 = new RowTypeInfo(types01, fieldNames01);
 
 
@@ -72,7 +73,9 @@ public class MultiInert02 {
 
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        Configuration conf = new Configuration();
+        conf.setString(RestOptions.BIND_PORT.key(), "50100-50200");
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
         streamEnv.setParallelism(1);
 //        streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         EnvironmentSettings settings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
@@ -85,11 +88,12 @@ public class MultiInert02 {
                         "from kafka_stock_order o left join kafka_stock_order_confirm c on o.order_no = c.order_no");
 
         DataStream<Row> ds = tableEnv.toRetractStream(joinedTbl, Row.class)
-                .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
+//                .map(tp2 -> Row.join(tp2.f1, Row.of(tp2.f0)))
+                .map(tp2 -> tp2.f1)
                 .returns(rowTypeInfo01);
 
-        OutputTag<Row> outputTag01 = new OutputTag<Row>("OutputTag01", rowTypeInfo02){};
-        OutputTag<Row> outputTag02 = new OutputTag<Row>("OutputTag02", rowTypeInfo03){};
+        OutputTag<Row> outputTag01 = new OutputTag<Row>("outputTag01", rowTypeInfo02){};
+        OutputTag<Row> outputTag02 = new OutputTag<Row>("outputTag02", rowTypeInfo03){};
 
         SingleOutputStreamOperator<Row> mainDataStream = ds.process(new ProcessFunction<Row, Row>() {
             @Override
@@ -109,35 +113,22 @@ public class MultiInert02 {
 //        streamEnv.execute("a");
 
         Map<String, OutputTag<Row>> insertTblOtMap = new HashMap<>();
-        insertTblOtMap.put("side_output_01", outputTag01);
-        insertTblOtMap.put("side_output_02", outputTag02);
+        insertTblOtMap.put("kafka_side_output_01", outputTag01);
+        insertTblOtMap.put("kafka_side_output_02", outputTag02);
         for (Map.Entry<String, OutputTag<Row>> entry : insertTblOtMap.entrySet()) {
+            String insertTbl = entry.getKey();
             DataStream<Row> currDs = mainDataStream.getSideOutput(entry.getValue());
             Table tbl = tableEnv.fromDataStream(currDs);
-            String toInsert = entry.getKey();
-            String fromView = "view_for_" + toInsert;
-            tableEnv.createTemporaryView(fromView, tbl);
-//            tableEnv.sqlQuery()
+            tbl.executeInsert(insertTbl);
         }
-        //------------------------------------------
-//        for (Map.Entry<String, OutputTag<Row>> entry : insertTblOtMap.entrySet()) {
-//            DataStream<Row> currDs = mainDataStream.getSideOutput(entry.getValue());
-//            tableEnv.fromDataStream(currDs)
-//                    .executeInsert(entry.getKey());
-//        }
-        //------------------------------------------
-//        DataStream<Row> ds01 = mainDataStream.getSideOutput(outputTag01);
-//        tableEnv.fromDataStream(ds01)
-//                .executeInsert("side_output_01");
-//
-//        DataStream<Row> ds02 = mainDataStream.getSideOutput(outputTag02);
-//        tableEnv.fromDataStream(ds02)
-//                .executeInsert("side_output_02");
+        //主流输出
+//        Table tbl = tableEnv.fromDataStream(mainDataStream);
+//        tbl.executeInsert("kafka_main_output");
     }
 
 
     private static void createTmp(StreamTableEnvironment tableEnv) {
-        tableEnv.executeSql("create table side_output_01(\n" +
+        tableEnv.executeSql("create table kafka_side_output_01(\n" +
                 "    sec_code string,\n" +
                 "    order_type bigint\n" +
                 ")\n" +
@@ -152,7 +143,7 @@ public class MultiInert02 {
                 " 'json.timestamp-format.standard' = 'SQL'\n" +
                 ")");
 
-        tableEnv.executeSql("create table side_output_02(\n" +
+        tableEnv.executeSql("create table kafka_side_output_02(\n" +
                 "    sec_code string,\n" +
                 "    order_no bigint\n" +
                 ")\n" +
@@ -161,6 +152,22 @@ public class MultiInert02 {
                 " 'topic' = 'side_output_02',\n" +
                 " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
                 " 'properties.group.id' = 'side_output_02_group',\n" +
+                " 'format' = 'json',\n" +
+                " 'scan.startup.mode' = 'latest-offset',\n" +
+                " 'json.ignore-parse-errors' = 'true',\n" +
+                " 'json.timestamp-format.standard' = 'SQL'\n" +
+                ")");
+
+        tableEnv.executeSql("create table kafka_main_output(\n" +
+                "    sec_code string,\n" +
+                "    order_type bigint,\n" +
+                "    order_no bigint\n" +
+                ")\n" +
+                "with (\n" +
+                " 'connector' = 'kafka',\n" +
+                " 'topic' = 'main_output',\n" +
+                " 'properties.bootstrap.servers' = '192.168.2.201:9092',\n" +
+                " 'properties.group.id' = 'main_output_group',\n" +
                 " 'format' = 'json',\n" +
                 " 'scan.startup.mode' = 'latest-offset',\n" +
                 " 'json.ignore-parse-errors' = 'true',\n" +

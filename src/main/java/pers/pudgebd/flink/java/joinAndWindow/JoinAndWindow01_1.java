@@ -111,7 +111,6 @@ public class JoinAndWindow01_1 {
                 "    ts_sql timestamp(3) COMMENT '订单接收时间，微妙级时间戳'," +
                 "    ts_iso timestamp(3) COMMENT '订单接收时间，微妙级时间戳'," +
                 "    ts_long bigint COMMENT '订单接收时间，微妙级时间戳'" +
-//                "    ,WATERMARK FOR ts AS ts - INTERVAL '5' SECONDS"+
                 ") \n" +
                 "with (\n" +
                 " 'connector' = 'kafka',\n" +

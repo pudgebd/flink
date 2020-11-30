@@ -60,24 +60,12 @@ public class LocalTest {
 
     @Test
     public void print() throws Exception {
-        System.out.println("CREATE TABLE MyHiveDimTable (\n" +
-                "    channel STRING,\n" +
-                "    name STRING,\n" +
-                "    dt STRING" +
-                ") PARTITIONED BY (dt) WITH (" +
-                "'connector'='filesystem',\n" +
-                "'path'='hdfs://cdh601:8020/user/hive/warehouse/myhivedimtable',\n" +
-                "'format'='parquet',\n" +
-                "'sink.partition-commit.delay'='1 h',\n"+
-                "'sink.partition-commit.policy.kind'='success-file',\n" +
-                "'streaming-source.enable'='true',\n" +
-                "'streaming-source.monitor-interval'='1 m',\n" +
-                "'streaming-source.consume-order'='create-time',\n" +
-                "'streaming-source.consume-start-offset'='2020-11-17',\n" +
-                "'lookup.join.cache.ttl'='1 min',\n" +
-                "'lookup.cache.max-rows' = '5000',\n" +
-                "'lookup.cache.ttl' = '1min'\n" +
-                ")");
+        System.out.println("insert into kafka_stock_alert_self_buy_sell " +
+                "select sec_code, " +
+                "alert_self_buy_sell_udaf(order_type, acct_id, trade_dir, trade_price, trade_vol, is_acc) " +
+                "as alert_percent " +
+                "from kafka_stock_after_join_read " +
+                "group by TUMBLE(ts, INTERVAL '10' SECONDS), sec_code");
     }
 
     @Test
