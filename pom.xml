@@ -144,12 +144,12 @@
         <!--<scope>${curr.scope}</scope>-->
         <!--</dependency>-->
 
-        <!--<dependency>-->
-        <!--<groupId>org.apache.kafka</groupId>-->
-        <!--<artifactId>kafka-clients</artifactId>-->
-        <!--<version>0.11.0.3</version>-->
-        <!--<scope>${curr.scope}</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>0.11.0.3</version>
+            <scope>${curr.scope}</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>

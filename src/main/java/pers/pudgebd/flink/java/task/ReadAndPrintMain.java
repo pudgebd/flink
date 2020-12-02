@@ -1,7 +1,10 @@
 package pers.pudgebd.flink.java.task;
 
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.table.api.EnvironmentSettings;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
@@ -17,7 +20,28 @@ public class ReadAndPrintMain {
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(bsEnv, bsSettings);
 
-//        String rawSqls = URLDecoder.decode(args[0], StandardCharsets.UTF_8.name());
+        DataStreamSource<Integer> dss = bsEnv.addSource(new SourceFunction<Integer>() {
+            @Override
+            public void run(SourceContext<Integer> ctx) throws Exception {
+                while (true) {
+                    ctx.collect(1);
+                    Thread.sleep(1000L);
+                }
+            }
+
+            @Override
+            public void cancel() {
+            }
+        });
+        dss.print();
+        bsEnv.execute("demo_job");
+    }
+
+    public static void main2(String[] args) throws Exception {
+        StreamExecutionEnvironment bsEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(bsEnv, bsSettings);
+
         String[] sqls = rawSqls.split(";");
         int tailIdx = sqls.length - 1;
         for (int i = 0; i <= tailIdx; i++) {
