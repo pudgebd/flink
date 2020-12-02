@@ -29,8 +29,11 @@ public class TmpMain {
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
 
         createSth(tableEnv);
-        Table tmp = tableEnv.sqlQuery(
-                "select bigint_to_ts(ts_long) from kafka_stock_order");
+        String sql = "select sec_code, min(order_price) as min_order_price, max(order_price) as max_order_price \n" +
+                "from kafka_stock_order " +
+                "group by TUMBLE(proctime, INTERVAL '10' SECONDS), sec_code";
+        System.out.println(sql);
+        Table tmp = tableEnv.sqlQuery(sql);
 
         tableEnv.toAppendStream(tmp, Row.class)
                 .print();

@@ -32,7 +32,7 @@ import static pers.pudgebd.flink.java.joinAndWindow.JoinAndWindow01_1.createSth;
 //        select order_no, balance where order_no >= '1000' and order_no < '5000'
 public class MultiInert01 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
         streamEnv.setParallelism(1);
 //        streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
