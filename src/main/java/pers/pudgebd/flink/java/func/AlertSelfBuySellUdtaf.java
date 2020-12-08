@@ -100,15 +100,15 @@ public class AlertSelfBuySellUdtaf extends TableAggregateFunction<Double, SelfBu
 
 
     public void accumulate(SelfBuySellAcc accumulate, Long orderType, String acctId,
-                           String tradeDir, Long tradePrice, Long tradeVol, boolean isAcc) {
-        accOrRetract(accumulate, isAcc, orderType, acctId, tradeDir,
+                           String tradeDir, Long tradePrice, Long tradeVol) {
+        accOrRetract(accumulate, true, orderType, acctId, tradeDir,
                 tradePrice, tradeVol);
     }
 
 
     public void retract(SelfBuySellAcc accumulate, Long orderType, String acctId,
-                        String tradeDir, Long tradePrice, Long tradeVol, boolean isAcc) {
-        accOrRetract(accumulate, isAcc, orderType, acctId, tradeDir,
+                        String tradeDir, Long tradePrice, Long tradeVol) {
+        accOrRetract(accumulate, false, orderType, acctId, tradeDir,
                 tradePrice, tradeVol);
     }
 

@@ -51,6 +51,7 @@ public class JoinAndWindow03 {
                 })
                 .window(TumblingProcessingTimeWindows.of(Time.seconds(3)))
                 .apply(new FlatJoinFunction<Row, Row, Row>() {
+
                     @Override
                     public void join(Row first, Row second, Collector<Row> out) throws Exception {
                         Row r1 = Row.join(Row.ofKind(RowKind.INSERT, "order"), first);
