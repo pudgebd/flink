@@ -41,9 +41,9 @@ public class JoinAndWindow_success_part2 {
                         ).as("alert_percent")
                 )
                 .select($("sec_code"), $("alert_percent"),
-                        $("w").start().cast(DataTypes.STRING()),
-                        $("w").end().cast(DataTypes.STRING()));
-
+                        $("w").start().cast(DataTypes.TIMESTAMP(3)),
+                        $("w").end().cast(DataTypes.DOUBLE()));
+                //str TIMESTAMP
         tableEnv.toRetractStream(aggTbl, Row.class)
                 .map(tp2 -> tp2.f1)
                 .print();
