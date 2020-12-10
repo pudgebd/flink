@@ -1,6 +1,5 @@
 package pers.pudgebd.flink.java.joinAndWindow;
 
-import com.haizhi.streamx.flinkcluster.platformapp.func.ArbitraryAggFunc;
 import com.haizhi.streamx.sqlparser.common.util.CommonSqlUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
