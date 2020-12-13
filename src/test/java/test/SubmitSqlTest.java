@@ -91,19 +91,19 @@ public class SubmitSqlTest {
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY.key(), "fixed-delay");
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS.key(), "3");
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY.key(), "10 s");
-        if (StringUtils.isBlank(jarAppMainClass)) {
+//        if (StringUtils.isBlank(jarAppMainClass)) {
             flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
-                    "hdfs://cdh601:8020/streamx-test/flink-common;" +
+                    "hdfs://cdh601:8020/streamx-test/flink-common/flink_2.12-1.11.2;" +
                             "hdfs://cdh601:8020/streamx-test/flink-datasource/flink_2.12-1.11.2/jdbc;" +
                             "hdfs://cdh601:8020/streamx-test/flink-datasource/flink_2.12-1.11.2/kafka;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hbase-1.4.13;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hadoop-2.7.4;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hive-2.1.1" +
                            "");
-        } else {
-            flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
-                    "hdfs://cdh601:8020/streamx-test/flink-common");
-        }
+//        } else {
+//            flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
+//                    "hdfs://cdh601:8020/streamx-test/flink-common/flink_2.12-1.11.2");
+//        }
 
         String[] progArgs = {PropKey.RAW_SQLS, encodedRawSqls,
                 "-minIdleStateRetentionTime", "46400000",

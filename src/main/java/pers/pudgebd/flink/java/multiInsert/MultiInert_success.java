@@ -12,7 +12,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
@@ -122,12 +121,12 @@ public class MultiInert_success {
             DataStream<String> currDs = mainDataStream.getSideOutput(entry.getValue())
                     .map(row -> row.toString());
 
-            FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>(
-                    "192.168.2.201:9092",
-                    insertTbl,
-                    new org.apache.flink.api.common.serialization.SimpleStringSchema()); // fault-tolerance
-
-            currDs.addSink(myProducer);
+//            FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<String>(
+//                    "192.168.2.201:9092",
+//                    insertTbl,
+//                    new org.apache.flink.api.common.serialization.SimpleStringSchema()); // fault-tolerance
+//
+//            currDs.addSink(myProducer);
 //            Table tbl = tableEnv.fromDataStream(currDs);
 //            tbl.executeInsert(insertTbl);
         }

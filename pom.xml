@@ -59,6 +59,16 @@
             <artifactId>streamx-app-common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.flink</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -66,6 +76,16 @@
             <artifactId>streamx-customer-demo</artifactId>
             <version>${project.version}</version>
             <scope>${customer.demo.scope}</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.flink</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -81,6 +101,14 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.flink</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -222,21 +250,31 @@
             <scope>${flink.scope}</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-            <!--<scope>${other.scope}</scope>-->
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.flink</groupId>-->
+            <!--<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>-->
+            <!--<version>${flink.version}</version>-->
+            <!--<scope>${kafka.scope}</scope>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.kafka</groupId>-->
+                    <!--<artifactId>kafka-clients</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-            <version>${flink.version}</version>
-            <!--<scope>${other.scope}</scope>-->
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.flink</groupId>-->
+            <!--<artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>-->
+            <!--<version>${flink.version}</version>-->
+            <!--<scope>${kafka.scope}</scope>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.kafka</groupId>-->
+                    <!--<artifactId>kafka-clients</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -458,6 +496,7 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${apache.log4j.core}</version>
+            <scope>${other.scope}</scope>
         </dependency>
 
         <dependency>
@@ -514,6 +553,7 @@
                 <other.scope>provided</other.scope>
                 <hadoop.scope>provided</hadoop.scope>
                 <customer.demo.scope>compile</customer.demo.scope>
+                <kafka.scope>provided</kafka.scope>
             </properties>
         </profile>
         <profile>
@@ -524,6 +564,7 @@
                 <other.scope>compile</other.scope>
                 <hadoop.scope>compile</hadoop.scope>
                 <customer.demo.scope>compile</customer.demo.scope>
+                <kafka.scope>compile</kafka.scope>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
