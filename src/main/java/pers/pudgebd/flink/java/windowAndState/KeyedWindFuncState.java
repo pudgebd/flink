@@ -59,9 +59,9 @@ public class KeyedWindFuncState {
 
         KeyedStream<Row, String> ks = sos.keyBy(row -> String.valueOf(row.getField(0)));
         WindowedStream<Row, String, TimeWindow> ws = ks.timeWindow(Time.seconds(10), Time.seconds(2));
-//        processOrApply(ws);
+        processOrApply(ws);
 //        reduce(ws);
-        agg(ws);
+//        agg(ws);
         streamEnv.execute("a");
     }
 
