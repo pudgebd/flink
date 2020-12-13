@@ -33,7 +33,7 @@ public class TestJarApp {
     private static final Logger LOG = LoggerFactory.getLogger(TestJarApp.class);
 
     public static void main(String[] args) throws Exception {
-        LOG.info("----- version: " + 3);
+        LOG.info("----- version: " + 4);
         StreamExecutionEnvironment streamEnv = EnvUtils.getEnv(args);
 
         streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
