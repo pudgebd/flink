@@ -46,6 +46,7 @@
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>com.haizhi.streamx</groupId>
@@ -59,16 +60,6 @@
             <artifactId>streamx-app-common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.kafka</groupId>
-                    <artifactId>kafka-clients</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -76,16 +67,6 @@
             <artifactId>streamx-customer-demo</artifactId>
             <version>${project.version}</version>
             <scope>${customer.demo.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.kafka</groupId>
-                    <artifactId>kafka-clients</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -106,10 +87,6 @@
                     <groupId>org.apache.kafka</groupId>
                     <artifactId>kafka-clients</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -122,14 +99,6 @@
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
                     <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -148,14 +117,6 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -172,14 +133,6 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -202,14 +155,6 @@
                     <groupId>org.apache.commons</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -218,16 +163,6 @@
             <artifactId>flink-clients_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -240,14 +175,6 @@
                     <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-mapreduce-client-core</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -256,32 +183,12 @@
             <artifactId>flink-table-api-java</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-java-bridge_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -289,16 +196,6 @@
             <artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -307,16 +204,6 @@
             <version>${flink.version}</version>
             <type>pom</type>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -324,16 +211,6 @@
             <artifactId>flink-table-common</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -341,16 +218,6 @@
             <artifactId>flink-table-planner_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -358,43 +225,42 @@
             <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+            <scope>${other.scope}</scope>
+            <!--<scope>compile</scope>-->
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.flink</groupId>-->
-            <!--<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>-->
-            <!--<version>${flink.version}</version>-->
-            <!--<scope>${kafka.scope}</scope>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.apache.kafka</groupId>-->
-                    <!--<artifactId>kafka-clients</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
+            <version>${flink.version}</version>
+            <scope>${other.scope}</scope>
+            <!--<scope>compile</scope>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.flink</groupId>-->
-            <!--<artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>-->
-            <!--<version>${flink.version}</version>-->
-            <!--<scope>${kafka.scope}</scope>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.apache.kafka</groupId>-->
-                    <!--<artifactId>kafka-clients</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -406,14 +272,6 @@
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-core</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -422,16 +280,6 @@
             <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${other.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -446,16 +294,6 @@
             <artifactId>flink-csv</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -463,16 +301,6 @@
             <artifactId>flink-json</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -480,16 +308,6 @@
             <artifactId>flink-avro</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -497,16 +315,6 @@
             <artifactId>flink-parquet_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -514,16 +322,6 @@
             <artifactId>flink-runtime-web_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -531,16 +329,6 @@
             <artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>${flink.scope}</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-connector-kafka-base_${scala.binary.version}</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -694,7 +482,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${apache.log4j.core}</version>
-            <scope>${other.scope}</scope>
         </dependency>
 
         <dependency>
@@ -750,8 +537,7 @@
                 <flink.scope>provided</flink.scope>
                 <other.scope>provided</other.scope>
                 <hadoop.scope>provided</hadoop.scope>
-                <customer.demo.scope>compile</customer.demo.scope>
-                <kafka.scope>provided</kafka.scope>
+                <customer.demo.scope>test</customer.demo.scope>
             </properties>
         </profile>
         <profile>
@@ -760,9 +546,8 @@
                 <profileActive>local</profileActive>
                 <flink.scope>compile</flink.scope>
                 <other.scope>compile</other.scope>
-                <hadoop.scope>compile</hadoop.scope>
+                <hadoop.scope>provided</hadoop.scope>
                 <customer.demo.scope>compile</customer.demo.scope>
-                <kafka.scope>compile</kafka.scope>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -832,25 +617,25 @@
         </plugins>
     </build>
     <!--<build>-->
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>net.alchim31.maven</groupId>-->
-                <!--<artifactId>scala-maven-plugin</artifactId>-->
-                <!--<version>3.2.1</version>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<artifactId>maven-assembly-plugin</artifactId>-->
-                <!--<version>2.4.1</version>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<source>8</source>-->
-                    <!--<target>8</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<groupId>net.alchim31.maven</groupId>-->
+    <!--<artifactId>scala-maven-plugin</artifactId>-->
+    <!--<version>3.2.1</version>-->
+    <!--</plugin>-->
+    <!--<plugin>-->
+    <!--<artifactId>maven-assembly-plugin</artifactId>-->
+    <!--<version>2.4.1</version>-->
+    <!--</plugin>-->
+    <!--<plugin>-->
+    <!--<groupId>org.apache.maven.plugins</groupId>-->
+    <!--<artifactId>maven-compiler-plugin</artifactId>-->
+    <!--<configuration>-->
+    <!--<source>8</source>-->
+    <!--<target>8</target>-->
+    <!--</configuration>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
     <!--</build>-->
 
 </project>

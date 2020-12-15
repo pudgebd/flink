@@ -34,6 +34,8 @@ public class SubmitSqlTest {
     static String appName = null;
     static String encodedRawSqls = null;
     static String rawSqls = null;
+
+    static String jarPath = null;
     static String jarAppMainClass = null;
     static {
         try {
@@ -46,6 +48,8 @@ public class SubmitSqlTest {
 //            appName = "cq_customer_sql_num_01";
 //            String sqlFilePath = "/Users/chenqian/work_doc/sqls/customer_sql/num_01.sql";
             appName = "TestJarApp";
+//            jarPath = "hdfs://cdh601:8020/user/chenqian/demo_app/flink_app_with_kafka_conn.jar";
+            jarPath = "hdfs://cdh601:8020/user/chenqian/demo_app/flink_app_only_src_code.jar";
             jarAppMainClass = "pers.pudgebd.flink.java.task.TestJarApp";
 
             String sqlFilePath = "/Users/chenqian/Downloads/Untitled-9";
@@ -70,7 +74,7 @@ public class SubmitSqlTest {
         if (StringUtils.isBlank(jarAppMainClass)) {
             flinkConfMap.put(PipelineOptions.JARS.key(), "hdfs://cdh601:8020/streamx-test/platform/flink_2.12-1.11.2/streamx-app-sql-" + currVersion + "-jar-with-dependencies.jar");
         } else {
-            flinkConfMap.put(PipelineOptions.JARS.key(), "hdfs://cdh601:8020/streamx-test/platform/flink_2.12-1.11.2/flink.jar");
+            flinkConfMap.put(PipelineOptions.JARS.key(), jarPath);
         }
         flinkConfMap.put(JobManagerOptions.JVM_HEAP_MEMORY.key(), "512mb");
         flinkConfMap.put(TaskManagerOptions.TASK_HEAP_MEMORY.key(), "512mb");
@@ -91,19 +95,19 @@ public class SubmitSqlTest {
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY.key(), "fixed-delay");
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS.key(), "3");
         flinkConfMap.putIfAbsent(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY.key(), "10 s");
-        if (StringUtils.isBlank(jarAppMainClass)) {
+//        if (StringUtils.isBlank(jarAppMainClass)) {
             flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
                     "hdfs://cdh601:8020/streamx-test/flink-common/flink_2.12-1.11.2;" +
-                            "hdfs://cdh601:8020/streamx-test/flink-datasource/flink_2.12-1.11.2/jdbc;" +
+//                            "hdfs://cdh601:8020/streamx-test/flink-datasource/flink_2.12-1.11.2/jdbc;" +
                             "hdfs://cdh601:8020/streamx-test/flink-datasource/flink_2.12-1.11.2/kafka;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hbase-1.4.13;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hadoop-2.7.4;" +
 //                            "hdfs://cdh601:8020/flink-dist/platform-jars/flink-1.11-scala-2.12/hive-2.1.1" +
                            "");
-        } else {
-            flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
-                    "hdfs://cdh601:8020/streamx-test/flink-common/flink_2.12-1.11.2");
-        }
+//        } else {
+//            flinkConfMap.put(YarnConfigOptions.PROVIDED_LIB_DIRS.key(),
+//                    "hdfs://cdh601:8020/streamx-test/flink-common/flink_2.12-1.11.2");
+//        }
 
         String[] progArgs = {PropKey.RAW_SQLS, encodedRawSqls,
                 "-minIdleStateRetentionTime", "46400000",
