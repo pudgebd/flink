@@ -3,12 +3,15 @@ package pers.pudgebd.flink.java.func;
 import org.apache.flink.table.functions.ScalarFunction;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalField;
 
 
 public class BigintToTimestamp extends ScalarFunction {
 
+    public Timestamp eval(String num) {
+        return eval(
+                Long.parseLong(num)
+        );
+    }
 
     public Timestamp eval(Long num) {
         if (num == null) {
