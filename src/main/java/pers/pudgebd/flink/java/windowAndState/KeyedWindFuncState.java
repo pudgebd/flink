@@ -58,7 +58,7 @@ public class KeyedWindFuncState {
                 .returns(rowTypeInfo);
 
         KeyedStream<Row, String> ks = sos.keyBy(row -> String.valueOf(row.getField(0)));
-        WindowedStream<Row, String, TimeWindow> ws = ks.timeWindow(Time.seconds(10), Time.seconds(2));
+        WindowedStream<Row, String, TimeWindow> ws = ks.timeWindow(Time.seconds(20));
         processOrApply(ws);
 //        reduce(ws);
 //        agg(ws);
@@ -109,7 +109,7 @@ public class KeyedWindFuncState {
         ws.process(new ProcessWindowFunction<Row, String, String, TimeWindow>() {
             @Override
             public void process(String key, Context context, Iterable<Row> elements, Collector<String> out) throws Exception {
-
+                out.collect(key);
             }
         }).print();
     }
