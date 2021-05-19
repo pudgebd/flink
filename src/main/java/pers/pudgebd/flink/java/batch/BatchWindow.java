@@ -34,22 +34,21 @@ public class BatchWindow {
                     return new IdNamePo(arr[0], arr[1], Long.parseLong(arr[2]));
                 });
         soso.assignTimestampsAndWatermarks(new BatchWindowBoundedWaterMark(5))
-            .keyBy(po -> po.id)
-            .timeWindow(Time.seconds(10))
-            .process(new ProcessWindowFunction<IdNamePo, IdNamePo, String, TimeWindow>() {
-                @Override
-                public void process(String s, Context context, Iterable<IdNamePo> elements, Collector<IdNamePo> out) throws Exception {
-                    Iterator<IdNamePo> it = elements.iterator();
-                    while (it.hasNext()) {
-                        out.collect(it.next());
+                .keyBy(po -> po.id)
+                .timeWindow(Time.seconds(10))
+                .process(new ProcessWindowFunction<IdNamePo, IdNamePo, String, TimeWindow>() {
+                    @Override
+                    public void process(String s, Context context, Iterable<IdNamePo> elements, Collector<IdNamePo> out) throws Exception {
+                        Iterator<IdNamePo> it = elements.iterator();
+                        while (it.hasNext()) {
+                            out.collect(it.next());
+                        }
                     }
-                }
-            })
-            .print();
+                })
+                .print();
 
         streamEnv.execute("a");
     }
-
 
 
 }
