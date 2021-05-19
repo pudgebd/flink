@@ -33,15 +33,17 @@ public class BatchWindow {
                     String[] arr = str.split(",");
                     return new IdNamePo(arr[0], arr[1], Long.parseLong(arr[2]));
                 });
-        soso.assignTimestampsAndWatermarks(new BatchWindowBoundedWaterMark(5))
+        soso.assignTimestampsAndWatermarks(new BatchWindowBoundedWaterMark(2))
                 .keyBy(po -> po.id)
                 .timeWindow(Time.seconds(10))
-                .process(new ProcessWindowFunction<IdNamePo, IdNamePo, String, TimeWindow>() {
+                .process(new ProcessWindowFunction<IdNamePo, String, String, TimeWindow>() {
                     @Override
-                    public void process(String s, Context context, Iterable<IdNamePo> elements, Collector<IdNamePo> out) throws Exception {
+                    public void process(String s, Context context, Iterable<IdNamePo> elements, Collector<String> out) throws Exception {
+                        long start = context.window().getStart();
+                        long end = context.window().getEnd();
                         Iterator<IdNamePo> it = elements.iterator();
                         while (it.hasNext()) {
-                            out.collect(it.next());
+                            out.collect(it.next().toString() + "__start_" + start + "__end_" + end);
                         }
                     }
                 })
