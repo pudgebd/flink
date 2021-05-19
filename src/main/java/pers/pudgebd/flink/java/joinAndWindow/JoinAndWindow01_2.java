@@ -3,6 +3,7 @@ package pers.pudgebd.flink.java.joinAndWindow;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
 import org.apache.flink.configuration.Configuration;
@@ -39,6 +40,8 @@ public class JoinAndWindow01_2 {
         EnvironmentSettings bsSettings = EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(streamEnv, bsSettings);
 
+//        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+//        env.readFile()
         //Emit strategy has not been supported for Table Aggregate!
 //        tableEnv.getConfig().getConfiguration().setBoolean("table.exec.emit.early-fire.enabled", true);
 //        tableEnv.getConfig().getConfiguration().setString("table.exec.emit.early-fire.delay", "1000 ms");
