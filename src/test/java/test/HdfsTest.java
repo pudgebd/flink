@@ -23,7 +23,7 @@ public class HdfsTest {
     public void put() throws Exception {
         HdfsUtils hdfsUtils = new HdfsUtils();
         hdfsUtils.copyFromLocalFile(
-                "/Users/chenqian/github/flink_udf/out/artifacts/flink_udf_jar/flink.udf.jar",
+                "/Users/pudgebd/github/flink_udf/out/artifacts/flink_udf_jar/flink.udf.jar",
                 "/flink-dist/platform-jars/udf",
                 true);
     }

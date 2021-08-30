@@ -40,19 +40,19 @@ public class SubmitSqlTest {
     static {
         try {
 //            appName = "cq_test_sql_hive_dim";
-//            String sqlFilePath = "/Users/chenqian/work_doc/sqls/flink_sql/test_hive_dim.sql";
+//            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_hive_dim.sql";
 //            appName = "test_map_state";
-//            String sqlFilePath = "/Users/chenqian/work_doc/sqls/flink_sql/test_map_state.sql";
+//            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_map_state.sql";
 //            appName = "test_two_insert";
-//            String sqlFilePath = "/Users/chenqian/work_doc/sqls/flink_sql/test_two_insert.sql";
+//            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_two_insert.sql";
 //            appName = "cq_customer_sql_num_01";
-//            String sqlFilePath = "/Users/chenqian/work_doc/sqls/customer_sql/num_01.sql";
+//            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/customer_sql/num_01.sql";
             appName = "TestJarApp";
-//            jarPath = "hdfs://cdh601:8020/user/chenqian/demo_app/flink_app_with_kafka_conn.jar";
-            jarPath = "hdfs://cdh601:8020/user/chenqian/demo_app/flink_app_only_src_code.jar";
+//            jarPath = "hdfs://cdh601:8020/user/pudgebd/demo_app/flink_app_with_kafka_conn.jar";
+            jarPath = "hdfs://cdh601:8020/user/pudgebd/demo_app/flink_app_only_src_code.jar";
             jarAppMainClass = "pers.pudgebd.flink.java.task.TestJarApp";
 
-            String sqlFilePath = "/Users/chenqian/Downloads/Untitled-9";
+            String sqlFilePath = "/Users/pudgebd/Downloads/Untitled-9";
             rawSqls = IOUtils.toString(new FileInputStream(sqlFilePath));
             encodedRawSqls = URLEncoder.encode(rawSqls, StandardCharsets.UTF_8.name());
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class SubmitSqlTest {
 
     @Test
     public void submitSqlApplicationMode() throws Exception {
-        File yarnConfDir = new File("/Users/chenqian/work_doc/cluster/sz/conf");
+        File yarnConfDir = new File("/Users/pudgebd/work_doc/cluster/sz/conf");
         Map<String,InputStream> yarnConfInputs = new HashMap<>();
         for (File confFile : yarnConfDir.listFiles()) {
             yarnConfInputs.put(confFile.getName(),new FileInputStream(confFile));
@@ -87,7 +87,7 @@ public class SubmitSqlTest {
         flinkConfMap.putIfAbsent(CheckpointingOptions.STATE_BACKEND.key(), "rocksdb");
         flinkConfMap.putIfAbsent(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER.key(), "true");
 
-        String ckPath = StringUtils.join("hdfs://cdh601:8020/user/chenqian/checkpoints/cq_local_submit_app_mode/" + appName);
+        String ckPath = StringUtils.join("hdfs://cdh601:8020/user/pudgebd/checkpoints/cq_local_submit_app_mode/" + appName);
         flinkConfMap.putIfAbsent(CheckpointingOptions.CHECKPOINTS_DIRECTORY.key(), ckPath);
         flinkConfMap.putIfAbsent(ExecutionCheckpointingOptions.EXTERNALIZED_CHECKPOINT.key(), "RETAIN_ON_CANCELLATION");
         flinkConfMap.putIfAbsent(ExecutionCheckpointingOptions.CHECKPOINTING_INTERVAL.key(), "30000");

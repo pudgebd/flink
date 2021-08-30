@@ -102,7 +102,7 @@ public class JoinAndWindow01_1 {
 //        tableEnv.executeSql("CREATE FUNCTION alert_self_buy_sell AS 'pers.pudgebd.flink.java.func.AlertSelfBuySellUdaf' LANGUAGE JAVA");
 
         String rawSqls = IOUtils.toString(new FileInputStream(
-                "/Users/chenqian/work_doc/sqls/customer_sql/create_tables.sql"
+                "/Users/pudgebd/work_doc/sqls/customer_sql/create_tables.sql"
         ));
         List<String> sqlArr = CommonSqlUtils.getSqlsFromRawStr(rawSqls);
         for (String sql : sqlArr) {

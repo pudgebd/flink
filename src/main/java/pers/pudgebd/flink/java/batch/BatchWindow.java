@@ -27,7 +27,7 @@ public class BatchWindow {
         streamEnv.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         DataStreamSource<String> dss = streamEnv.readTextFile(
-                "/Users/chenqian/work_doc/sqls/flink_sql/debugsql/data/stock_order_input_data.csv");
+                "/Users/pudgebd/work_doc/sqls/flink_sql/debugsql/data/stock_order_input_data.csv");
         SingleOutputStreamOperator<IdNamePo> soso = dss.filter(str -> StringUtils.isNotBlank(str))
                 .map(str -> {
                     String[] arr = str.split(",");
