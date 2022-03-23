@@ -1,6 +1,6 @@
 package pers.pudgebd.flink.java.joinAndWindow;
 
-import com.haizhi.streamx.sqlparser.common.util.CommonSqlUtils;
+import com.org.streamx.sqlparser.common.util.CommonSqlUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeHint;

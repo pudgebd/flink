@@ -1,11 +1,11 @@
 package test;
 
 
-import com.haizhi.streamx.app.common.constant.PropKey;
-import com.haizhi.streamx.flinkcluster.client.FlinkOnYarnSubmitClient;
-import com.haizhi.streamx.flinkcluster.client.bean.HzFlinkApplicatonModeSubmitPara;
-import com.haizhi.streamx.sqlparser.common.util.CommonSqlUtils;
-import com.haizhi.streamx.sqlparser.spark.statement.lineage.SparkStmtData;
+import com.org.streamx.app.common.constant.PropKey;
+import com.org.streamx.flinkcluster.client.FlinkOnYarnSubmitClient;
+import com.org.streamx.flinkcluster.client.bean.HzFlinkApplicatonModeSubmitPara;
+import com.org.streamx.sqlparser.common.util.CommonSqlUtils;
+import com.org.streamx.sqlparser.spark.statement.lineage.SparkStmtData;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.*;
@@ -39,13 +39,13 @@ public class SubmitSqlTest {
     static String jarAppMainClass = null;
     static {
         try {
-//            appName = "cq_test_sql_hive_dim";
+//            appName = "user_test_sql_hive_dim";
 //            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_hive_dim.sql";
 //            appName = "test_map_state";
 //            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_map_state.sql";
 //            appName = "test_two_insert";
 //            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/flink_sql/test_two_insert.sql";
-//            appName = "cq_customer_sql_num_01";
+//            appName = "user_customer_sql_num_01";
 //            String sqlFilePath = "/Users/pudgebd/work_doc/sqls/customer_sql/num_01.sql";
             appName = "TestJarApp";
 //            jarPath = "hdfs://cdh601:8020/user/pudgebd/demo_app/flink_app_with_kafka_conn.jar";
@@ -87,7 +87,7 @@ public class SubmitSqlTest {
         flinkConfMap.putIfAbsent(CheckpointingOptions.STATE_BACKEND.key(), "rocksdb");
         flinkConfMap.putIfAbsent(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER.key(), "true");
 
-        String ckPath = StringUtils.join("hdfs://cdh601:8020/user/pudgebd/checkpoints/cq_local_submit_app_mode/" + appName);
+        String ckPath = StringUtils.join("hdfs://cdh601:8020/user/pudgebd/checkpoints/user_local_submit_app_mode/" + appName);
         flinkConfMap.putIfAbsent(CheckpointingOptions.CHECKPOINTS_DIRECTORY.key(), ckPath);
         flinkConfMap.putIfAbsent(ExecutionCheckpointingOptions.EXTERNALIZED_CHECKPOINT.key(), "RETAIN_ON_CANCELLATION");
         flinkConfMap.putIfAbsent(ExecutionCheckpointingOptions.CHECKPOINTING_INTERVAL.key(), "30000");
@@ -116,7 +116,7 @@ public class SubmitSqlTest {
         HzFlinkApplicatonModeSubmitPara appModeSubmitPara = new HzFlinkApplicatonModeSubmitPara();
 
         if (StringUtils.isBlank(jarAppMainClass)) {
-            appModeSubmitPara.setApplicationClassName("com.haizhi.streamx.app.sql.PlatformAppMain");
+            appModeSubmitPara.setApplicationClassName("com.org.streamx.app.sql.PlatformAppMain");
         } else {
             appModeSubmitPara.setApplicationClassName(jarAppMainClass);
         }

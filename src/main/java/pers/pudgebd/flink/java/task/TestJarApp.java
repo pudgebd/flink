@@ -1,13 +1,13 @@
 package pers.pudgebd.flink.java.task;
 
-import com.haizhi.streamx.app.common.constant.FuncName;
-import com.haizhi.streamx.app.common.constant.LocalDebug;
-import com.haizhi.streamx.app.common.func.BigintToTimestamp;
-import com.haizhi.streamx.app.func.Scene07ProcWinFunc;
-import com.haizhi.streamx.app.func.vo.Scene07OutVo;
-import com.haizhi.streamx.app.scene.po.ConfirmPo;
-import com.haizhi.streamx.app.scene.util.EnvUtils;
-import com.haizhi.streamx.app.scene.watermark.BoundedWaterMark;
+import com.org.streamx.app.common.constant.FuncName;
+import com.org.streamx.app.common.constant.LocalDebug;
+import com.org.streamx.app.common.func.BigintToTimestamp;
+import com.org.streamx.app.func.Scene07ProcWinFunc;
+import com.org.streamx.app.func.vo.Scene07OutVo;
+import com.org.streamx.app.scene.po.ConfirmPo;
+import com.org.streamx.app.scene.util.EnvUtils;
+import com.org.streamx.app.scene.watermark.BoundedWaterMark;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;

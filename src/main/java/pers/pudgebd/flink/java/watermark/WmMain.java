@@ -56,7 +56,7 @@ public class WmMain {
                 " 'properties.security.protocol' = 'SASL_PLAINTEXT',\n" +
                 " 'properties.sasl.mechanism' = 'GSSAPI',\n" +
                 " 'properties.sasl.kerberos.service.name' = 'kafka',\n" +
-                " 'properties.sasl.jaas.config' = 'com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true refreshKrb5Config=true storeKey=true serviceName=kafka keyTab=\"/home/work/work.keytab\" principal=\"work@HAIZHI.COM\";'\n" +
+                " 'properties.sasl.jaas.config' = 'com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true refreshKrb5Config=true storeKey=true serviceName=kafka keyTab=\"/home/work/work.keytab\" principal=\"work@org.COM\";'\n" +
                 ")");
     }
 

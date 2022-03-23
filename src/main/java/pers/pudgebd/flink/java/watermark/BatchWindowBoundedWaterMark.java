@@ -1,6 +1,6 @@
 package pers.pudgebd.flink.java.watermark;
 
-import com.haizhi.streamx.app.scene.po.ConfirmPo;
+import com.org.streamx.app.scene.po.ConfirmPo;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.slf4j.Logger;

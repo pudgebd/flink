@@ -1,6 +1,6 @@
 package pers.pudgebd.flink.java.task.basic;
 
-import com.haizhi.streamx.sqlparser.common.util.CommonSqlUtils;
+import com.org.streamx.sqlparser.common.util.CommonSqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;

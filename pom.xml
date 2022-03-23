@@ -49,28 +49,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.haizhi.streamx</groupId>
+            <groupId>com.org.streamx</groupId>
             <artifactId>streamx-sql-parser</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.haizhi.streamx</groupId>
+            <groupId>com.org.streamx</groupId>
             <artifactId>streamx-app-common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.haizhi.streamx</groupId>
+            <groupId>com.org.streamx</groupId>
             <artifactId>streamx-customer-demo</artifactId>
             <version>${project.version}</version>
             <scope>${customer.demo.scope}</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.haizhi.streamx</groupId>
+            <groupId>com.org.streamx</groupId>
             <artifactId>streamx-flink-cluster</artifactId>
             <version>${streamx.flink.cluster}</version>
             <scope>test</scope>
@@ -592,7 +592,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.haizhi.streamx.app.sql.PlatformAppMain</mainClass>
+                            <mainClass>com.org.streamx.app.sql.PlatformAppMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

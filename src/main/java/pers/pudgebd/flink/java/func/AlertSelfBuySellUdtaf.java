@@ -1,6 +1,6 @@
 package pers.pudgebd.flink.java.func;
 
-import com.haizhi.streamx.sqlparser.lineage.util.MapUtils;
+import com.org.streamx.sqlparser.lineage.util.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableLong;
 import org.apache.flink.table.functions.AggregateFunction;

@@ -42,7 +42,7 @@ public class HiveDim01_02 {
                 " )WITH(\n" +
                 "   'connector' = 'jdbc',\n" +
                 "   'url' = 'jdbc:mysql://192.168.1.59:3306/stream_dev?charset=utf8',\n" +
-                "   'table-name' = 'cq_test_insert',\n" +
+                "   'table-name' = 'user_test_insert',\n" +
                 "   'username' = 'stream_dev',\n" +
                 "   'password' = 'stream_dev'\n" +
                 " )");
