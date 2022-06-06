@@ -34,7 +34,7 @@ public class ReadAndPrintMain {
             }
         });
         dss.print();
-        bsEnv.execute("demo_job1");
+        bsEnv.execute("demo_job2");
     }
 
     public static void main2(String[] args) throws Exception {
