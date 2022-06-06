@@ -7,24 +7,6 @@
     <version>1.2.1</version>
 
 
-    <repositories>
-        <repository>
-            <id>Nexus-releases</id>
-            <url>http://mvn.stargraph.cn/nexus/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>Nexus-central</id>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <url>http://mvn.stargraph.cn/nexus/content/repositories/central/</url>
-        </repository>
-        <repository>
-            <id>Nexus-thirdParty</id>
-            <url>https://mvn.stargraph.cn/nexus/content/repositories/thirdparty/</url>
-        </repository>
-    </repositories>
-
     <properties>
         <flink.version>1.11.2</flink.version>
         <scala.binary.version>2.12</scala.binary.version>
@@ -48,48 +30,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>com.org.streamx</groupId>
-            <artifactId>streamx-sql-parser</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.org.streamx</groupId>
-            <artifactId>streamx-app-common</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.org.streamx</groupId>
-            <artifactId>streamx-customer-demo</artifactId>
-            <version>${project.version}</version>
-            <scope>${customer.demo.scope}</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.org.streamx</groupId>
-            <artifactId>streamx-flink-cluster</artifactId>
-            <version>${streamx.flink.cluster}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.kafka</groupId>
-                    <artifactId>kafka-clients</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-core</artifactId>

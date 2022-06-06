@@ -1,6 +1,5 @@
 package pers.pudgebd.flink.java.func;
 
-import com.org.streamx.sqlparser.lineage.util.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableLong;
 import org.apache.flink.table.functions.AggregateFunction;
@@ -86,9 +85,9 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
             accumulate.getSum().add(curMoney);
         }
         if ("b".equalsIgnoreCase(tradeDir)) {
-            MapUtils.fillKeyLongMapAddUpVal(acctIdBuyMap, acctId, curMoney);
+//            MapUtils.fillKeyLongMapAddUpVal(acctIdBuyMap, acctId, curMoney);
         } else if ("s".equalsIgnoreCase(tradeDir)) {
-            MapUtils.fillKeyLongMapAddUpVal(acctIdSellMap, acctId, curMoney);
+//            MapUtils.fillKeyLongMapAddUpVal(acctIdSellMap, acctId, curMoney);
         } else {
             LOG.error("无效的 tradeDir：" + tradeDir);
         }
@@ -126,7 +125,7 @@ public class AlertSelfBuySellUdaf extends AggregateFunction<Double, SelfBuySellA
 
     private void foreachStrLongMap(Map<String, Long> toMap, Map<String, Long> fromMap) {
         for (Map.Entry<String, Long> entry : fromMap.entrySet()) {
-            MapUtils.fillKeyLongMapAddUpVal(toMap, entry.getKey(), entry.getValue());
+//            MapUtils.fillKeyLongMapAddUpVal(toMap, entry.getKey(), entry.getValue());
         }
     }
 

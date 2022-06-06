@@ -21,6 +21,13 @@ import java.util.Calendar;
 
 public class LocalTest {
 
+
+    @Test
+    public void tmp() throws Exception {
+        String str = String.valueOf(System.currentTimeMillis());
+        System.out.println(str.length());
+    }
+
     @Test
     public void encodeSql() throws Exception {
 //        System.out.println(CrtTblSqls.KAFKA_SOURCE);

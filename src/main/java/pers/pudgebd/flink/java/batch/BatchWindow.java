@@ -1,6 +1,5 @@
 package pers.pudgebd.flink.java.batch;
 
-import com.org.streamx.app.scene.watermark.BoundedWaterMark;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;
